@@ -35,21 +35,21 @@
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
 apikeystr = ""; 
-if (apikey!="") apikeystr = "&apikey="+apikey;
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
 // ----------------------------------------------------------------------
 // Display
 // ----------------------------------------------------------------------
-$("body").css('background-color','#222');
-$(window).ready(function(){
-    $("#footer").css('background-color','#181818');
-    $("#footer").css('color','#999');
+$("body").css('background-color', '#222');
+$(window).ready(function() {
+    $("#footer").css('background-color', '#181818');
+    $("#footer").css('color', '#999');
 });
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -64,40 +64,38 @@ config.showapp = function(){show()};
 config.hideapp = function(){clear()};
 
 // ----------------------------------------------------------------------
-// APPLICATION
+// Application
 // ----------------------------------------------------------------------
 config.init();
 
-function init()
-{   
+function init() {   
 
 }
     
-function show()
-{   
+function show() {   
     $(".ajax-loader").hide();
 }
    
-function updater()
-{
+function updater() {
 
 }
 
-function resize() 
-{
+function resize() {
 
 }
 
-function clear()
-{
+function clear() {
 
 }
 
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log (level, message) {
-    if (level=="ERROR") alert(level+": "+message);
-    console.log(level+": "+message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
+    console.log(level + ": " + message);
 }
+
 </script>

@@ -313,21 +313,21 @@
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
 apikeystr = ""; 
-if (apikey!="") apikeystr = "&apikey="+apikey;
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
 // ----------------------------------------------------------------------
 // Display
 // ----------------------------------------------------------------------
-$("body").css('background-color','#222');
-$(window).ready(function(){
-    $("#footer").css('background-color','#181818');
-    $("#footer").css('color','#999');
+$("body").css('background-color', '#222');
+$(window).ready(function() {
+    $("#footer").css('background-color', '#181818');
+    $("#footer").css('color', '#999');
 });
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -354,11 +354,11 @@ config.showapp = function(){show()};
 config.hideapp = function(){hide()};
 
 // ----------------------------------------------------------------------
-// APPLICATION
+// Application
 // ----------------------------------------------------------------------
 var feeds = {};
 
-var live = false;
+var updateTimer = false;
 var show_balance_line = 0;
 var has_wind = false;
 var reload = true;
@@ -376,7 +376,7 @@ config.init();
 // App start function
 function init()
 {        
-    app_log("INFO","mysolarpvdivert init");
+    appLog("INFO", "mysolarpvdivert init");
 
     var timeWindow = (3600000*6.0*1);
     view.end = +new Date;
@@ -456,7 +456,7 @@ function init()
 
 function show() 
 {
-    app_log("INFO","mysolarpvdivert show");
+    appLog("INFO", "mysolarpvdivert show");
     
     if (config.app.solar_kwh.value && config.app.use_kwh.value && config.app.import_kwh.value && config.app.divert_kwh.value) {
         if (!bargraph_initialized) init_bargraph();
@@ -468,14 +468,13 @@ function show()
     resize();
     
     // this.reload = true;
-    livefn();
-    live = setInterval(livefn,5000);
-
+    update();
+    updateTimer = setInterval(update, 5000);
 }
 
 function resize() 
 {
-    app_log("INFO","mysolarpvdivert resize");
+    appLog("INFO", "mysolarpvdivert resize");
     
     var top_offset = 0;
     var placeholder_bound = $('#placeholder_bound');
@@ -541,10 +540,10 @@ function resize()
 
 function hide() 
 {
-    clearInterval(live);
+    clearInterval(updateTimer);
 }
 
-function livefn()
+function update()
 {
     // Check if the updater ran in the last 60s if it did not the app was sleeping
     // and so the data needs a full reload.
@@ -1156,8 +1155,11 @@ $(window).resize(function(){
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log (level, message) {
-    if (level=="ERROR") alert(level+": "+message);
-    console.log(level+": "+message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
+    console.log(level + ": " + message);
 }
+
 </script>

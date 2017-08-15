@@ -119,17 +119,18 @@ padding:10px;
 
 
 <script type="text/javascript">
+
 // ----------------------------------------------------------------------
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = "";
-if (apikey != "") {apikeystr = "&apikey=" + apikey;}
+apikeystr = ""; 
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -169,7 +170,7 @@ config.hideapp = function() {
 };
 
 // ----------------------------------------------------------------------
-// APPLICATION
+// Application
 // ----------------------------------------------------------------------
 var feeds = {};
 var meta = {};
@@ -183,17 +184,17 @@ var previousPointHalfHour = false;
 
 var flot_font_size = 12;
 
-//Time of first data reading
+// Time of first data reading
 var start_time = 0;
-//Currently selected tariff
+// Currently selected tariff
 var selected_energy_rate = null;
 
-//These should be in a resource file for regionalization
+// These should be in a resource file for regionalization
 var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 var selected_start, selected_end;
-var updaterinst = false;
+var updateTimer = false;
 
 // ----------------------------------------------------------------------
 // Display
@@ -250,14 +251,14 @@ function show() {
 
     resize();
 	
-	updater();
+	update();
 	
 	//Update every 45 seconds
-	updaterinst = setInterval(updater,45000);
+	updateTimer = setInterval(update,45000);
 }
 
-function updater() {
-	if (selected_start==null) {	oneweek(); $(".bargraph-week").addClass("selected");} else { reloadExistingRange(); }
+function update() {
+	if (selected_start == null) {	oneweek(); $(".bargraph-week").addClass("selected");} else { reloadExistingRange(); }
 }
 
 function clearHighlight() {
@@ -362,7 +363,7 @@ function timeFormatter(ms) {
 
 function hide() {
     //We should stop any timers we have started here
-	clearInterval(updaterinst);
+	clearInterval(updateTimer);
 }
 
 $("#halfhour_placeholder").bind("plothover", function(event, pos, item) {
@@ -773,8 +774,11 @@ $(window).resize(function() {
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log(level, message) {
-    if (level == "ERROR") alert(level + ": " + message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
     console.log(level + ": " + message);
 }
+
 </script>

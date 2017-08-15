@@ -150,22 +150,22 @@
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
 apikeystr = ""; 
-if (apikey!="") apikeystr = "&apikey="+apikey;
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
 // ----------------------------------------------------------------------
 // Display
 // ----------------------------------------------------------------------
-$("body").css('background-color','WhiteSmoke');
+$("body").css('background-color', 'WhiteSmoke');
 $(window).ready(function(){
     //$("#footer").css('background-color','#181818');
     //$("#footer").css('color','#999');
 });
 
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -183,7 +183,7 @@ config.showapp = function(){show()};
 config.hideapp = function(){hide()};
 
 // ----------------------------------------------------------------------
-// APPLICATION
+// Application
 // ----------------------------------------------------------------------
 var feeds = {};
 var meta = {};
@@ -197,7 +197,7 @@ var period_text = "month";
 var period_average = 0;
 var flot_font_size = 12;
 var start_time = 0;
-var updaterinst = false;
+var updateTimer = false;
 var use_start = 0;
 
 config.init();
@@ -226,16 +226,16 @@ function show() {
     bargraph_load(start,end);
     bargraph_draw();
 
-    updater();
-    updaterinst = setInterval(updater,5000);
+    update();
+    updateTimer = setInterval(update, 5000);
     $(".ajax-loader").hide();
 }
 
 function hide() {
-    clearInterval(updaterinst);
+    clearInterval(updateTimer);
 }
 
-function updater()
+function update()
 {
     feed.listbyidasync(function(result){
         
@@ -611,8 +611,11 @@ $(window).resize(function(){
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log (level, message) {
-    if (level=="ERROR") alert(level+": "+message);
-    console.log(level+": "+message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
+    console.log(level + ": " + message);
 }
+
 </script>

@@ -126,21 +126,21 @@
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
 apikeystr = ""; 
-if (apikey!="") apikeystr = "&apikey="+apikey;
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
 // ----------------------------------------------------------------------
 // Display
 // ----------------------------------------------------------------------
-$("body").css('background-color','#222');
-$(window).ready(function(){
-    $("#footer").css('background-color','#181818');
-    $("#footer").css('color','#999');
+$("body").css('background-color', '#222');
+$(window).ready(function() {
+    $("#footer").css('background-color', '#181818');
+    $("#footer").css('color', '#999');
 });
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -159,11 +159,11 @@ config.showapp = function(){show()};
 config.hideapp = function(){hide()};
 
 // ----------------------------------------------------------------------
-// APPLICATION
+// Application
 // ----------------------------------------------------------------------
 var feeds = {};
 
-var live = false;
+var updateTimer = false;
 var show_balance_line = 0;
 var reload = true;
 var autoupdate = true;
@@ -183,7 +183,7 @@ config.init();
 // App start function
 function init()
 {        
-    app_log("INFO","mysolarpv init");
+    appLog("INFO", "mysolarpv init");
     
     my_wind_cap = ((annual_wind_gen / 365) / 0.024) / capacity_factor;
 
@@ -223,16 +223,15 @@ function init()
 
 function show() 
 {
-    app_log("INFO","mysolarpv show");
+    appLog("INFO", "mysolarpv show");
     resize();
-    livefn();
-    live = setInterval(livefn,5000);
-
+    update();
+    updateTimer = setInterval(update, 5000);
 }
 
 function resize() 
 {
-    app_log("INFO","mysolarpv resize");
+    appLog("INFO", "mysolarpv resize");
     
     var top_offset = 0;
     var placeholder_bound = $('#placeholder_bound');
@@ -274,12 +273,12 @@ function resize()
 
 function hide() 
 {
-    clearInterval(live);
+    clearInterval(updateTimer);
 }
 
-function livefn()
+function update()
 {
-    // Check if the updater ran in the last 60s if it did not the app was sleeping
+    // Check if the update ran in the last 60s if it did not the app was sleeping
     // and so the data needs a full reload.
     var now = +new Date();
     if ((now-lastupdate)>60000) reload = true;
@@ -508,8 +507,11 @@ $(window).resize(function(){
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log (level, message) {
-    if (level=="ERROR") alert(level+": "+message);
-    console.log(level+": "+message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
+    console.log(level + ": " + message);
 }
+
 </script>

@@ -40,21 +40,21 @@
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
 apikeystr = ""; 
-if (apikey!="") apikeystr = "&apikey="+apikey;
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
 // ----------------------------------------------------------------------
 // Display
 // ----------------------------------------------------------------------
-$("body").css('background-color','#222');
-$(window).ready(function(){
-    $("#footer").css('background-color','#181818');
-    $("#footer").css('color','#999');
+$("body").css('background-color', '#222');
+$(window).ready(function() {
+    $("#footer").css('background-color', '#181818');
+    $("#footer").css('color', '#999');
 });
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -77,44 +77,44 @@ var feeds = {};
 
 config.init();
 
-function init()
-{   
+function init() {   
 
 }
     
-function show()
-{   
+function show() {   
     $(".ajax-loader").hide();
+    
     resize();
-    updaterinst = setInterval(updater,5000);
+    updateTimer = setInterval(update, 5000);
 }
-   
-function updater()
-{
-    var use = config.app.use.value;
+
+function update() {
     feeds = feed.listbyid();
+    
+    var use = config.app.use.value;
     $("#powernow").html((feeds[use].value*1).toFixed(1)+"W");
 }
 
-function resize() 
-{
-    updater();
+function resize() {
+	update();
 }
 
-function clear()
-{
-    clearInterval(updaterinst);
+function clear() {
+    clearInterval(updateTimer);
 }
 
-$(window).resize(function(){
+$(window).resize(function() {
     resize();
 });
 
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log (level, message) {
-    if (level=="ERROR") alert(level+": "+message);
-    console.log(level+": "+message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
+    console.log(level + ": " + message);
 }
+
 </script>

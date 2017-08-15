@@ -9,8 +9,8 @@
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/config.js?v=<?php echo $v; ?>"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/feed.js?v=<?php echo $v; ?>"></script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_bars.js?v=<?php echo $v; ?>"></script> 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_lines.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/barGraph.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/lineGraph.js?v=<?php echo $v; ?>"></script> 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/timeseries.js?v=<?php echo $v; ?>"></script> 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/vis.helper.js?v=<?php echo $v; ?>"></script> 
 
@@ -131,21 +131,21 @@
 // Globals
 // ----------------------------------------------------------------------
 var path = "<?php print $path; ?>";
-var apikey = "<?php print $apikey; ?>";
-var sessionwrite = <?php echo $session['write']; ?>;
+var apiKey = "<?php print $apikey; ?>";
+var sessionWrite = <?php echo $session['write']; ?>;
 
 apikeystr = ""; 
-if (apikey!="") apikeystr = "&apikey="+apikey;
+if (apiKey != "") apikeystr = "&apikey="+apiKey;
 
 // ----------------------------------------------------------------------
 // Display
 // ----------------------------------------------------------------------
-$("body").css('background-color','#222');
-$(window).ready(function(){
-    $("#footer").css('background-color','#181818');
-    $("#footer").css('color','#999');
+$("body").css('background-color', '#222');
+$(window).ready(function() {
+    $("#footer").css('background-color', '#181818');
+    $("#footer").css('color', '#999');
 });
-if (!sessionwrite) $(".openconfig").hide();
+if (!sessionWrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -166,15 +166,15 @@ config.showapp = function(){show()};
 config.hideapp = function(){hide()};
 
 // ----------------------------------------------------------------------
-// App variable init
+// Application
 // ----------------------------------------------------------------------
 var daily_data = [];
 var daily = [];
 var raw_kwh_data = [];
 var kwhdtmp = [];
 
-var fastupdateinst = false;
-var slowupdateinst = false;
+var updateTimerFast = false;
+var updateTimerSlow = false;
 
 var viewmode = "energy";
 
@@ -198,7 +198,7 @@ config.init();
 
 function init()
 {   
-    app_log("INFO","myelectric init");
+    appLog("INFO", "myelectric init");
 
     var timewindow = (3600000*3.0*1);
     view.end = +new Date;
@@ -208,28 +208,28 @@ function init()
     // Decleration of myelectric events
     // -------------------------------------------------------------------------
     
-    $("#zoomout").click(function () {view.zoomout(); reload = true; autoupdate = false; fastupdate();});
-    $("#zoomin").click(function () {view.zoomin(); reload = true; autoupdate = false; fastupdate();});
-    $('#right').click(function () {view.panright(); reload = true; autoupdate = false; fastupdate();});
-    $('#left').click(function () {view.panleft(); reload = true; autoupdate = false; fastupdate();});
+    $("#zoomout").click(function () {view.zoomout(); reload = true; autoupdate = false; updateFast();});
+    $("#zoomin").click(function () {view.zoomin(); reload = true; autoupdate = false; updateFast();});
+    $('#right').click(function () {view.panright(); reload = true; autoupdate = false; updateFast();});
+    $('#left').click(function () {view.panleft(); reload = true; autoupdate = false; updateFast();});
     
     $('.myelectric-time').click(function () {
         view.timewindow($(this).attr("time")/24.0); 
         reload = true; 
         autoupdate = true;
-        fastupdate();
+        updateFast();
     });
     
     $(".myelectric-view-cost").click(function(){
         viewmode = "cost";
-        fastupdate();
-        slowupdate();
+        updateFast();
+        updateSlow();
     });
     
     $(".myelectric-view-kwh").click(function(){
         viewmode = "energy";
-        fastupdate();
-        slowupdate();
+        updateFast();
+        updateSlow();
     });
 }
     
@@ -244,7 +244,7 @@ function show()
     $(".caret").css('border-bottom-color','#fff');
     */
     
-    app_log("INFO","myelectric show");
+    appLog("INFO", "myelectric show");
     // start of all time
     var meta = {};
     $.ajax({                                      
@@ -262,18 +262,18 @@ function show()
     // resize and start updaters
     resize();
     // called from withing resize:
-    // fastupdate();
-    // slowupdate();
+    // updateFast();
+    // updateSlow();
     
     
     
-    fastupdateinst = setInterval(fastupdate,5000);
-    slowupdateinst = setInterval(slowupdate,60000);
+    updateTimerFast = setInterval(updateFast, 5000);
+    updateTimerSlow = setInterval(updateSlow, 60000);
 }
     
 function resize() 
 {
-    app_log("INFO","myelectric resize");
+    appLog("INFO", "myelectric resize");
     
     var windowheight = $(window).height();
     
@@ -281,19 +281,19 @@ function resize()
     
     var width = $("#placeholder_bound_kwhd").width();
     $("#placeholder_kwhd").attr('width',width);
-    graph_bars.width = width;
+    barGraph.width = width;
     
     var height = $("#placeholder_bound_kwhd").height();
     $("#placeholder_kwhd").attr('height',height); 
-    graph_bars.height = height;
+    barGraph.height = height;
     
     var width = $("#placeholder_bound_power").width();
     $("#placeholder_power").attr('width',width);
-    graph_lines.width = width;
+    lineGraph.width = width;
     
     var height = $("#placeholder_bound_power").height();
     $("#placeholder_power").attr('height',height); 
-    graph_lines.height = height;
+    lineGraph.height = height;
     
     
     if (width<=500) {
@@ -317,17 +317,17 @@ function resize()
     }
     
     reloadkwhd = true;
-    fastupdate();
-    slowupdate();
+    updateFast();
+    updateSlow();
 }
     
 function hide()
 {
-    clearInterval(fastupdateinst);
-    clearInterval(slowupdateinst);
+    clearInterval(updateTimerFast);
+    clearInterval(updateTimerSlow);
 }
     
-function fastupdate()
+function updateFast()
 {
    var use = config.app.use.value;
    var use_kwh = config.app.use_kwh.value;
@@ -457,7 +457,7 @@ function fastupdate()
         }
     };
     
-    graph_lines.draw("placeholder_power",series,options);
+    lineGraph.draw("placeholder_power",series,options);
     $(".ajax-loader").hide();
 
     // --------------------------------------------------------------------------------------------------------
@@ -519,7 +519,7 @@ function fastupdate()
     // --------------------------------------------------------------------------------------------------------        
 }
     
-function slowupdate()
+function updateSlow()
 {
    var use = config.app.use.value;
    var use_kwh = config.app.use_kwh.value;
@@ -541,7 +541,7 @@ function slowupdate()
     var interval = 86400;
     var now = new Date();
     var end = Math.floor(now.getTime() * 0.001);
-    var start = end - interval * Math.round(graph_bars.width/30);
+    var start = end - interval * Math.round(barGraph.width/30);
     
     var result = feed.getdataDMY(use_kwh,start*1000,end*1000,"daily");
 
@@ -590,7 +590,7 @@ function slowupdate()
         $("#usetoday").html((usetoday_kwh).toFixed(0));
     }
 
-    graph_bars.draw('placeholder_kwhd',[daily]);
+    barGraph.draw('placeholder_kwhd',[daily]);
     $(".ajax-loader").hide();
 }
 
@@ -599,8 +599,11 @@ $(window).resize(function(){ resize(); });
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function app_log (level, message) {
-    if (level=="ERROR") alert(level+": "+message);
-    console.log(level+": "+message);
+function appLog(level, message) {
+    if (level == "ERROR") {
+        alert(level + ": " + message);
+    }
+    console.log(level + ": " + message);
 }
+
 </script>
