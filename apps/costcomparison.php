@@ -127,8 +127,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 if (!sessionWrite) $(".openconfig").hide();
 
@@ -157,7 +156,7 @@ config.app = {
 };
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
 config.initapp = function() {
     init()
@@ -239,7 +238,7 @@ function show() {
 	
 	console.log(feeds);
 	
-    meta["use_kwh"] = feed.getmeta(feeds.use_kwh.id);
+    meta["use_kwh"] = feed.getMeta(feeds.use_kwh.id);
 
     if (meta.use_kwh.start_time > start_time) {
 		//Wind back start time to midnight on first reading day
@@ -458,7 +457,7 @@ function bargraph_load(start, end) {
 		  
 	var halfhour =  [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5, 22, 22.5, 23, 23.5];
 	
-    var elec_data = feed.getdataDMY_time_of_use(feeds.use_kwh.id, start, end, "daily", JSON.stringify(halfhour));
+    var elec_data = feed.getDailyTimeOfUse(feeds.use_kwh.id, start, end, JSON.stringify(halfhour));
 
 	//console.log(elec_data);
 	

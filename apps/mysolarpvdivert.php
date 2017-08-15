@@ -316,8 +316,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -347,7 +346,7 @@ config.app = {
 }
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
 config.initapp = function(){init()};
 config.showapp = function(){show()};
@@ -551,7 +550,7 @@ function update()
     if ((now-lastupdate)>60000) reload = true;
     lastupdate = now;
     
-    var feeds = feed.listbyid();
+    var feeds = feed.getListById();
     var solar_now = parseInt(feeds[config.app.solar.value].value);
     var use_now = parseInt(feeds[config.app.use.value].value);
     var divert_now = parseInt(feeds[config.app.divert.value].value);
@@ -652,11 +651,11 @@ function draw_powergraph() {
         reload = false;
         view.start = 1000*Math.floor((view.start/1000)/interval)*interval;
         view.end = 1000*Math.ceil((view.end/1000)/interval)*interval;
-        timeseries.load("solar",feed.getdata(config.app.solar.value,view.start,view.end,interval,0,0));
-        timeseries.load("use",feed.getdata(config.app.use.value,view.start,view.end,interval,0,0));
-        timeseries.load("divert",feed.getdata(config.app.divert.value,view.start,view.end,interval,0,0));
+        timeseries.load("solar", feed.getData(config.app.solar.value, view.start, view.end, interval, 0, 0));
+        timeseries.load("use", feed.getData(config.app.use.value, view.start,view.end,interval, 0, 0));
+        timeseries.load("divert", feed.getData(config.app.divert.value, view.start,view.end,interval, 0, 0));
         if (has_wind) {
-          timeseries.load("wind",feed.getdata(config.app.wind.value,view.start,view.end,interval,0,0));
+          timeseries.load("wind", feed.getData(config.app.wind.value, view.start,view.end,interval, 0, 0));
         }
     }
     // -------------------------------------------------------------------------------------------------------
@@ -854,10 +853,10 @@ function init_bargraph() {
     bargraph_initialized = true;
     // Fetch the start_time covering all kwh feeds - this is used for the 'all time' button
     var latest_start_time = 0;
-    var solar_meta = feed.getmeta(config.app.solar_kwh.value);
-    var use_meta = feed.getmeta(config.app.use_kwh.value);
-    var divert_meta = feed.getmeta(config.app.divert_kwh.value);
-    var import_meta = feed.getmeta(config.app.import_kwh.value);
+    var solar_meta = feed.getMeta(config.app.solar_kwh.value);
+    var use_meta = feed.getMeta(config.app.use_kwh.value);
+    var divert_meta = feed.getMeta(config.app.divert_kwh.value);
+    var import_meta = feed.getMeta(config.app.import_kwh.value);
     if (solar_meta.start_time > latest_start_time) latest_start_time = solar_meta.start_time;
     if (use_meta.start_time > latest_start_time) latest_start_time = use_meta.start_time;
     if (divert_meta.start_time > latest_start_time) latest_start_time = divert_meta.start_time;
@@ -884,13 +883,13 @@ function load_bargraph(start,end) {
     start = Math.floor(start/intervalms)*intervalms;
     
     // Load kWh data
-    var solar_kwh_data = feed.getdataDMY(config.app.solar_kwh.value,start,end,"daily");
-    var use_kwh_data = feed.getdataDMY(config.app.use_kwh.value,start,end,"daily");
-    var divert_kwh_data = feed.getdataDMY(config.app.divert_kwh.value,start,end,"daily");
-    var import_kwh_data = feed.getdataDMY(config.app.import_kwh.value,start,end,"daily");
+    var solar_kwh_data = feed.getDailyData(config.app.solar_kwh.value, start, end);
+    var use_kwh_data = feed.getDailyData(config.app.use_kwh.value, start, end);
+    var divert_kwh_data = feed.getDailyData(config.app.divert_kwh.value, start, end);
+    var import_kwh_data = feed.getDailyData(config.app.import_kwh.value, start, end);
     var wind_kwh_data = [];
     if (has_wind) {
-        wind_kwh_data = feed.getdataDMY(config.wind_kwh.value,start,end,"daily");
+        wind_kwh_data = feed.getDailyData(config.wind_kwh.value, start, end);
     }
     
     house_generated_kwhd_data = [];

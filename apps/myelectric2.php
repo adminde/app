@@ -183,8 +183,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -201,20 +200,54 @@ if (!sessionWrite) $(".openconfig").hide();
 // Configuration
 // ----------------------------------------------------------------------
 config.app = {
-    "title":{"type":"value", "default":"MY ELECTRIC", "name": "Title", "description":"Optional title for app"},
-    "use":{"type":"feed", "autoname":"use", "engine":"5"},
-    "use_kwh":{"type":"feed", "autoname":"use_kwh", "engine":5},
-    "unitcost":{"type":"value", "default":0.1508, "name": "Unit cost", "description":"Unit cost of electricity £/kWh"},
-    "currency":{"type":"value", "default":"£", "name": "Currency", "description":"Currency symbol (£,$..)"},
-    "showcomparison":{"type":"checkbox", "default":true, "name": "Show comparison", "description":"Energy stack comparison"}
+    "title": {
+        "type": "value", 
+        "default":"MY ELECTRIC", 
+        "name": "Title", 
+        "description":"Optional title for app"
+    },
+    "use": {
+        "type":"feed", 
+        "autoname":"use", 
+        "engine":"0,2,5"
+    },
+    "use_kwh": {
+        "type":"feed", 
+        "autoname":"use_kwh", 
+        "engine":"0,2,5"
+    },
+    "unitcost": {
+        "type":"value", 
+        "default":0.1508, 
+        "name": "Unit cost", 
+        "description":"Unit cost of electricity £/kWh"
+    },
+    "currency": {
+        "type":"value", 
+        "default":"£", 
+        "name": "Currency", 
+        "description":"Currency symbol (£,$..)"
+    },
+    "showcomparison": {
+        "type":"checkbox", 
+        "default":true, 
+        "name": "Show comparison", 
+        "description":"Energy stack comparison"
+    }
 };
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
-config.initapp = function(){init()};
-config.showapp = function(){show()};
-config.hideapp = function(){hide()};
+config.initapp = function() {
+    init()
+};
+config.showapp = function() {
+    show()
+};
+config.hideapp = function() {
+    hide()
+};
 
 // ----------------------------------------------------------------------
 // Application
@@ -259,9 +292,9 @@ function show() {
         $("#energystack-comparison").parent().hide();
     }
     
-    meta["use_kwh"] = feed.getmeta(feeds["use_kwh"].id);
+    meta["use_kwh"] = feed.getMeta(feeds["use_kwh"].id);
     if (meta["use_kwh"].start_time>start_time) start_time = meta["use_kwh"].start_time;
-    use_start = feed.getvalue(feeds["use_kwh"].id, start_time*1000)[1];
+    use_start = feed.getValue(feeds["use_kwh"].id, start_time*1000)[1];
 
     resize();
 
@@ -284,7 +317,7 @@ function hide() {
 
 function update()
 {
-    feed.listbyidasync(function(result){
+    feed.getAsyncListById(function(result) {
         
         for (var key in config.app) {
             if (config.app[key].value) feeds[key] = result[config.app[key].value];
@@ -479,7 +512,7 @@ function powergraph_load()
     start = Math.ceil(start/intervalms)*intervalms;
     end = Math.ceil(end/intervalms)*intervalms;
 
-    data["use"] = feed.getdata(feeds["use"].id,start,end,interval,1,1);
+    data["use"] = feed.getData(feeds["use"].id, start, end, interval, 1, 1);
     
     powergraph_series = [];
     powergraph_series.push({data:data["use"], yaxis:1, color:"#44b3e2", lines:{show:true, fill:0.8, lineWidth:0}});
@@ -563,7 +596,7 @@ function bargraph_load(start,end)
     end = Math.ceil(end/intervalms)*intervalms;
     start = Math.floor(start/intervalms)*intervalms;
     
-    var elec_result = feed.getdataDMY(feeds["use_kwh"].id,start,end,"daily");
+    var elec_result = feed.getDailyData(feeds["use_kwh"].id, start, end);
     
     var elec_data = [];
     

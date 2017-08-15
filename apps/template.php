@@ -43,8 +43,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -60,15 +59,26 @@ if (!sessionWrite) $(".openconfig").hide();
 // Configuration
 // ----------------------------------------------------------------------
 config.app = {
-    "use":{"type":"feed", "autoname":"use", "engine":"5", "description":"House or building use in watts"}
+    "use": {
+        "type": "feed", 
+        "autoname": "use", 
+        "engine": "0,2,5", 
+        "description": "House or building use in watts"
+    }
 };
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
-config.initapp = function(){init()};
-config.showapp = function(){show()};
-config.hideapp = function(){clear()};
+config.initapp = function() {
+    init()
+};
+config.showapp = function() {
+    show()
+};
+config.hideapp = function() {
+    clear()
+};
 
 // ----------------------------------------------------------------------
 // APPLICATION
@@ -78,10 +88,14 @@ var feeds = {};
 config.init();
 
 function init() {   
-
+    // Quick translation of feed ids
+    feeds = {};
+    for (var key in config.app) {
+        if (config.app[key].value) feeds[key] = config.feedsbyid[config.app[key].value];
+    }
 }
     
-function show() {   
+function show() {
     $(".ajax-loader").hide();
     
     resize();
@@ -89,10 +103,8 @@ function show() {
 }
 
 function update() {
-    feeds = feed.listbyid();
-    
-    var use = config.app.use.value;
-    $("#powernow").html((feeds[use].value*1).toFixed(1)+"W");
+    var latestData = feed.getListById();
+    $("#powernow").html((latestData[feeds["use"].id].value*1).toFixed(1)+"W");
 }
 
 function resize() {

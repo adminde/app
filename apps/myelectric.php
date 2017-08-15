@@ -9,9 +9,9 @@
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/config.js?v=<?php echo $v; ?>"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/feed.js?v=<?php echo $v; ?>"></script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/barGraph.js?v=<?php echo $v; ?>"></script> 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/lineGraph.js?v=<?php echo $v; ?>"></script> 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/timeseries.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_bars.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_lines.js?v=<?php echo $v; ?>"></script> 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/vis.helper.js?v=<?php echo $v; ?>"></script> 
 
 <div id="app-block" style="display:none">
@@ -134,8 +134,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -159,7 +158,7 @@ config.app = {
 
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
 config.initapp = function(){init()};
 config.showapp = function(){show()};
@@ -246,14 +245,7 @@ function show()
     
     appLog("INFO", "myelectric show");
     // start of all time
-    var meta = {};
-    $.ajax({                                      
-        url: path+"feed/getmeta.json",                         
-        data: "id="+config.app.use_kwh.value+apikeystr,
-        dataType: 'json',
-        async: false,                      
-        success(data_in) { meta = data_in; }
-    });
+    var meta = feed.getMeta(config.app.use_kwh.value);
     startalltime = meta.start_time;
     view.first_data = meta.start_time * 1000;
     
@@ -264,8 +256,6 @@ function show()
     // called from withing resize:
     // updateFast();
     // updateSlow();
-    
-    
     
     updateTimerFast = setInterval(updateFast, 5000);
     updateTimerSlow = setInterval(updateSlow, 60000);
@@ -370,18 +360,18 @@ function updateFast()
         
         var npoints = 1500;
         interval = Math.round(((view.end - view.start)/npoints)/1000);
-        if (interval<1) interval = 1;
+        if (interval < 1) interval = 1;
         
         view.start = 1000*Math.floor((view.start/1000)/interval)*interval;
         view.end = 1000*Math.ceil((view.end/1000)/interval)*interval;
         
-        timeseries.load("use",feed.getdata(use,view.start,view.end,interval,0,0));
+        timeseries.load("use", feed.getData(use, view.start, view.end, interval, 0, 0));
     }
     
     // --------------------------------------------------------------------
     // 1) Get last value of feeds
     // --------------------------------------------------------------------
-    feeds = feed.listbyid();
+    feeds = feed.getListById();
     
     // set the power now value
     if (viewmode=="energy") {
@@ -473,7 +463,7 @@ function updateFast()
 
     var time = new Date(now.getFullYear(),now.getMonth(),now.getDate()-dayofweek).getTime();
     if (time!=last_startofweektime) {
-        startofweek = feed.getvalue(use_kwh,time);
+        startofweek = feed.getValue(use_kwh, time);
         last_startofweektime = time;
     }
     if (startofweek===false) startofweek = [startalltime*1000,0];
@@ -487,7 +477,7 @@ function updateFast()
     // MONTH: repeat same process as above (scale is unitcost)
     var time = new Date(now.getFullYear(),now.getMonth(),1).getTime();
     if (time!=last_startofmonthtime) {
-        startofmonth = feed.getvalue(use_kwh,time);
+        startofmonth = feed.getValue(use_kwh, time);
         last_startofmonthtime = time;
     }
     if (startofmonth===false) startofmonth = [startalltime*1000,0];
@@ -501,7 +491,7 @@ function updateFast()
     // YEAR: repeat same process as above (scale is unitcost)
     var time = new Date(now.getFullYear(),0,1).getTime();
     if (time!=last_startofyeartime) {
-        startofyear = feed.getvalue(use_kwh,time);
+        startofyear = feed.getValue(use_kwh, time);
         last_startofyeartime = time;
     }
     if (startofyear===false) startofyear = [startalltime*1000,0];     
@@ -543,7 +533,7 @@ function updateSlow()
     var end = Math.floor(now.getTime() * 0.001);
     var start = end - interval * Math.round(barGraph.width/30);
     
-    var result = feed.getdataDMY(use_kwh,start*1000,end*1000,"daily");
+    var result = feed.getDailyData(use_kwh, start*1000, end*1000);
 
     var data = [];
     // remove nan values from the end.

@@ -129,8 +129,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -152,7 +151,7 @@ config.app = {
 };
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
 config.initapp = function(){init()};
 config.showapp = function(){show()};
@@ -284,14 +283,14 @@ function update()
     if ((now-lastupdate)>60000) reload = true;
     lastupdate = now;
     
-    var feeds = feed.listbyid();
+    var feeds = feed.getListById();
     var solar_now = 0;
     if (config.app.solar.value)
         solar_now = parseInt(feeds[config.app.solar.value].value);
         
     var use_now = parseInt(feeds[config.app.use.value].value);
     
-    var gridwind = feed.getvalueremote(67088);
+    var gridwind = feed.getRemoteValue(67088);
     var average_power = ((config.app.windkwh.value/365.0)/0.024);
     var wind_now = Math.round((average_power / average_wind_power) * gridwind);
 
@@ -380,13 +379,13 @@ function draw_powergraph() {
         view.end = 1000*Math.ceil((view.end/1000)/interval)*interval;
 
         var feedid = config.app.solar.value;
-        if (feedid!=false)
-            timeseries.load("solar",feed.getdata(feedid,view.start,view.end,interval,0,0));
-        
+        if (feedid!=false) {
+            timeseries.load("solar", feed.getData(feedid, view.start, view.end, interval, 0, 0));
+        }
         var feedid = config.app.use.value;
-        timeseries.load("use",feed.getdata(config.app.use.value,view.start,view.end,interval,0,0));
+        timeseries.load("use", feed.getData(config.app.use.value, view.start, view.end, interval, 0, 0));
         
-        timeseries.load("remotewind",feed.getdataremote(67088,view.start,view.end,interval));    
+        timeseries.load("remotewind", feed.getRemoteData(67088, view.start, view.end, interval));    
     }
     // -------------------------------------------------------------------------------------------------------
     

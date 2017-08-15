@@ -142,8 +142,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -169,7 +168,7 @@ config.app = {
 };
 config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
-config.feeds = feed.list();
+config.feeds = feed.getList();
 
 config.initapp = function(){init()};
 config.showapp = function(){show()};
@@ -339,7 +338,7 @@ function update()
     if ((now-lastupdate)>60000) reload = true;
     lastupdate = now;
     
-    var feeds = feed.listbyid();
+    feeds = feed.getListById();
     var solar_now = parseInt(feeds[config.app.solar.value].value);
     var use_now = parseInt(feeds[config.app.use.value].value);
 
@@ -420,8 +419,8 @@ function draw_powergraph() {
         reload = false;
         view.start = 1000*Math.floor((view.start/1000)/interval)*interval;
         view.end = 1000*Math.ceil((view.end/1000)/interval)*interval;
-        timeseries.load("solar",feed.getdata(config.app.solar.value,view.start,view.end,interval,0,0));
-        timeseries.load("use",feed.getdata(config.app.use.value,view.start,view.end,interval,0,0));
+        timeseries.load("solar", feed.getData(config.app.solar.value, view.start, view.end, interval, 0, 0));
+        timeseries.load("use", feed.getData(config.app.use.value, view.start, view.end, interval, 0, 0));
     }
     // -------------------------------------------------------------------------------------------------------
     
@@ -441,10 +440,9 @@ function draw_powergraph() {
     
     var datastart = timeseries.start_time("solar");
     
-    console.log(timeseries.length("solar"));
-    console.log(timeseries.length("use"));
-    
-    for (var z=0; z<timeseries.length("solar"); z++) {
+//     console.log(data.getLength("solar"));
+//     console.log(date.getLength("use"));
+    for (var z=0; z<data.getLength("solar"); z++) {
 
         // -------------------------------------------------------------------------------------------------------
         // Get solar or use values
@@ -545,9 +543,9 @@ function init_bargraph() {
     bargraph_initialized = true;
     // Fetch the start_time covering all kwh feeds - this is used for the 'all time' button
     var latest_start_time = 0;
-    var solar_meta = feed.getmeta(config.app.solar_kwh.value);
-    var use_meta = feed.getmeta(config.app.use_kwh.value);
-    var import_meta = feed.getmeta(config.app.import_kwh.value);
+    var solar_meta = feed.getMeta(config.app.solar_kwh.value);
+    var use_meta = feed.getMeta(config.app.use_kwh.value);
+    var import_meta = feed.getMeta(config.app.import_kwh.value);
     if (solar_meta.start_time > latest_start_time) latest_start_time = solar_meta.start_time;
     if (use_meta.start_time > latest_start_time) latest_start_time = use_meta.start_time;
     if (import_meta.start_time > latest_start_time) latest_start_time = import_meta.start_time;
@@ -572,12 +570,12 @@ function load_bargraph(start,end) {
     start = Math.floor(start/intervalms)*intervalms;
     
     // Load kWh data
-    var solar_kwh_data = feed.getdataDMY(config.app.solar_kwh.value,start,end,"daily");
-    var use_kwh_data = feed.getdataDMY(config.app.use_kwh.value,start,end,"daily");
-    var import_kwh_data = feed.getdataDMY(config.app.import_kwh.value,start,end,"daily");
+    var solar_kwh_data = feed.getDailyData(config.app.solar_kwh.value, start, end);
+    var use_kwh_data = feed.getDailyData(config.app.use_kwh.value, start, end);
+    var import_kwh_data = feed.getDailyData(config.app.import_kwh.value, start, end);
     
-    console.log(solar_kwh_data);
-    console.log(use_kwh_data);
+//     console.log(solar_kwh_data);
+//     console.log(use_kwh_data);
     
     solarused_kwhd_data = [];
     solar_kwhd_data = [];
