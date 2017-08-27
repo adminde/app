@@ -291,7 +291,7 @@ function hide() {
 
 function update()
 {
-    feed.getAsyncListById(function(result) {
+    feed.getListById(function(result) {
         
         for (var key in config.app) {
             if (config.app[key].value) feeds[key] = result[config.app[key].value];

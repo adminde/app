@@ -440,9 +440,9 @@ function draw_powergraph() {
     
     var datastart = timeseries.start_time("solar");
     
-//     console.log(data.getLength("solar"));
-//     console.log(date.getLength("use"));
-    for (var z=0; z<data.getLength("solar"); z++) {
+    //console.log(timeseries.length("solar"));
+    //console.log(timeseries.length("use"));
+    for (var z=0; z<timeseries.length("solar"); z++) {
 
         // -------------------------------------------------------------------------------------------------------
         // Get solar or use values
