@@ -245,7 +245,18 @@ function show()
     
     appLog("INFO", "myelectric show");
     // start of all time
+<<<<<<< HEAD
     var meta = feed.getMeta(config.app.use_kwh.value);
+=======
+    var meta = {};
+    $.ajax({                                      
+        url: path+"feed/getmeta.json",                         
+        data: "id="+config.app.use_kwh.value+apikeystr,
+        dataType: 'json',
+        async: false,                      
+        success: function(data_in) { meta = data_in; }
+    });
+>>>>>>> emoncms/master
     startalltime = meta.start_time;
     view.first_data = meta.start_time * 1000;
     
