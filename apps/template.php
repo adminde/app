@@ -1,12 +1,13 @@
 <?php
     global $path, $session;
-    $v = 5;
+    $v = 6;
 ?>
 <link href="<?php echo $path; ?>Modules/app/css/config.css?v=<?php echo $v; ?>" rel="stylesheet">
 <link href="<?php echo $path; ?>Modules/app/css/dark.css?v=<?php echo $v; ?>" rel="stylesheet">
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/config.js?v=<?php echo $v; ?>"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/feed.js?v=<?php echo $v; ?>"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/data.js?v=<?php echo $v; ?>"></script>
 
 <div id="app-block" style="display:none">
   <div class="col1"><div class="col1-inner">
@@ -61,8 +62,9 @@ if (!sessionWrite) $(".openconfig").hide();
 config.app = {
     "use": {
         "type": "feed", 
+        "class": "power",
         "autoname": "use", 
-        "engine": "0,2,5", 
+        "engine": "2,5,6", 
         "description": "House or building use in watts"
     }
 };
@@ -71,30 +73,25 @@ config.db = <?php echo json_encode($config); ?>;
 config.feeds = feed.getList();
 
 config.initapp = function() {
-    init()
+    init();
 };
 config.showapp = function() {
-    show()
+    show();
 };
 config.hideapp = function() {
-    clear()
+    clear();
 };
 
 // ----------------------------------------------------------------------
-// APPLICATION
+// Application
 // ----------------------------------------------------------------------
-var feeds = {};
-
 config.init();
 
-function init() {   
-    // Quick translation of feed ids
-    feeds = {};
-    for (var key in config.app) {
-        if (config.app[key].value) feeds[key] = config.feedsbyid[config.app[key].value];
-    }
+function init() {
+    // Initialize the data cache
+    data.init(feed, config);
 }
-    
+
 function show() {
     $(".ajax-loader").hide();
     
@@ -103,8 +100,11 @@ function show() {
 }
 
 function update() {
-    var latestData = feed.getListById();
-    $("#powernow").html((latestData[feeds["use"].id].value*1).toFixed(1)+"W");
+    // Asynchronously update all configured "power" and "energy" feeds
+    data.update(function(result) {
+
+        $("#powernow").html(result.getLatestValue("use").toFixed(1)+"W");
+    });
 }
 
 function resize() {

@@ -50,7 +50,14 @@ $available_apps = array (
         "status"=>"Development",
         "title"=>"OpenEVSE",
         "description"=>"Explore OpenEVSE charging"
-    )    //,"template"=>array(
+    ),
+    "energyconsdark"=>array(
+        "status"=>"Development",
+        "title"=>"Energy consumption (dark)",
+        "description"=>"Household energy consumption in real time power and daily resolution, shown in kWh or money spent."
+    )
+    
+    //"template"=>array(
     //    "status"=>"Development",
     //    "title"=>"Template",
     //    "description"=>"A basic app example useful for developing new apps"

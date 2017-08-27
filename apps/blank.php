@@ -1,12 +1,13 @@
 <?php
     global $path, $session;
-    $v = 5;
+    $v = 6;
 ?>
 <link href="<?php echo $path; ?>Modules/app/css/config.css?v=<?php echo $v; ?>" rel="stylesheet">
 <link href="<?php echo $path; ?>Modules/app/css/dark.css?v=<?php echo $v; ?>" rel="stylesheet">
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/config.js?v=<?php echo $v; ?>"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/feed.js?v=<?php echo $v; ?>"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/data.js?v=<?php echo $v; ?>"></script>
 
 <div id="app-block" style="display:none">
   <div style="height:20px; border-bottom:1px solid #333; padding:8px;">
@@ -38,8 +39,7 @@ var path = "<?php print $path; ?>";
 var apiKey = "<?php print $apikey; ?>";
 var sessionWrite = <?php echo $session['write']; ?>;
 
-apikeystr = ""; 
-if (apiKey != "") apikeystr = "&apikey="+apiKey;
+var feed = new Feed(apiKey);
 
 // ----------------------------------------------------------------------
 // Display
@@ -59,9 +59,15 @@ config.name = "<?php echo $name; ?>";
 config.db = <?php echo json_encode($config); ?>;
 config.feeds = feed.list();
 
-config.initapp = function(){init()};
-config.showapp = function(){show()};
-config.hideapp = function(){clear()};
+config.initapp = function() {
+    init();
+};
+config.showapp = function() {
+    show();
+};
+config.hideapp = function() {
+    clear();
+};
 
 // ----------------------------------------------------------------------
 // Application
