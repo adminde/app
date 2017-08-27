@@ -10,99 +10,94 @@
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/feed.js?v=<?php echo $v; ?>"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/data.js?v=<?php echo $v; ?>"></script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_bars.js?v=<?php echo $v; ?>"></script> 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_lines.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_energy.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_power.js?v=<?php echo $v; ?>"></script> 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/vis.helper.js?v=<?php echo $v; ?>"></script> 
 
 <div id="app-block" style="display:none">
-
-  <div class="col1"><div class="col1-inner">
-
-    <div style="height:20px; border-bottom:1px solid #333; padding-bottom:8px;">
-    
-        <div style="float:left; color:#aaa">
-        <span class="unit-select-cost" >Cost</span> | 
-        <span class="unit-select-kwh" >kWh</span>
+    <div class="col1"><div class="col1-inner">
+        <div style="height:20px; border-bottom:1px solid #333; padding-bottom:8px;">
+            
+            <div style="float:left; color:#aaa">
+                <span id="unit-select-cost" style="cursor:pointer">Cost</span> | 
+                <span id="unit-select-kwh" style="cursor:pointer"><b>kWh</b></span>
+            </div>
+            
+            <div style="float:right;">
+                <i class="openconfig icon-wrench icon-white" style="cursor:pointer; padding-right:5px"></i>
+            </div>
         </div>
         
-        <div style="float:right;">
-            <i class="openconfig icon-wrench icon-white" style="cursor:pointer; padding-right:5px"></i>
-        </div>
-    </div>
-    
-    <table style="width:100%">
-        <tr>
-            <td style="border:0; width:50%">
-                <div class="electric-title">POWER NOW</div>
-                <div class="power-value"><span id="powernow">0</span></div>
-            </td>
-            <td style="text-align:right; border:0;">
-                <div class="electric-title">TODAY</div>
-                <div class="power-value"><span id="constoday_units_a"></span><span id="constoday">0</span><span id="constoday_units_b" style="font-size:16px"> kWh</span></div>
-            </td>
-        </tr>
-    </table>
-
-    <br>
-
-    <div class="visnavblock" style="height:28px; padding-bottom:5px;">
-        <span class='visnav time-select' time='3'>3h</span>
-        <span class='visnav time-select' time='6'>6h</span>
-        <span class='visnav time-select' time='24'>D</span>
-        <span class='visnav time-select' time='168'>W</span>
-        <span class='visnav time-select' time='720'>M</span>
-        <span id='zoomin' class='visnav' >+</span>
-        <span id='zoomout' class='visnav' >-</span>
-        <span id='left' class='visnav' ><</span>
-        <span id='right' class='visnav' >></span>
-    </div>
-    <br>
-    
-    <div id="placeholder_bound_power" style="width:100%; height:220px;">
-        <canvas id="placeholder_power"></canvas>
-    </div>
-    <br>
-    
-    <div id="placeholder_bound_kwhd" style="width:100%; height:250px;">
-        <canvas id="placeholder_kwhd"></canvas>
-    </div>
-    <br>
+        <table style="width:100%">
+            <tr>
+                <td style="border:0; width:50%">
+                    <div class="electric-title">POWER NOW</div>
+                    <div class="power-value"><span id="powernow">0</span></div>
+                </td>
+                <td style="text-align:right; border:0;">
+                    <div class="electric-title">TODAY</div>
+                    <div class="power-value"><span id="constoday_units_a"></span><span id="constoday">0</span><span id="constoday_units_b" style="font-size:16px"> kWh</span></div>
+                </td>
+            </tr>
+        </table>
+        <br>
         
-    <table style="width:100%">
-        <tr>
-            <td class="appbox">
-                <div class="appbox-title">WEEK</div>
-                <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="week_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+        <div class="visnavblock" style="height:28px; padding-bottom:5px;">
+            <span class='visnav time-select' time='3'>3h</span>
+            <span class='visnav time-select' time='6'>6h</span>
+            <span class='visnav time-select' time='24'>D</span>
+            <span class='visnav time-select' time='168'>W</span>
+            <span class='visnav time-select' time='720'>M</span>
+            <span id='zoomin' class='visnav' >+</span>
+            <span id='zoomout' class='visnav' >-</span>
+            <span id='left' class='visnav' ><</span>
+            <span id='right' class='visnav' >></span>
+        </div>
+        <br>
+        
+        <div id="placeholder_bound_power" style="width:100%; height:220px;">
+            <canvas id="placeholder_power"></canvas>
+        </div>
+        <br>
+        
+        <div id="placeholder_bound_kwhd" style="width:100%; height:250px;">
+            <canvas id="placeholder_kwhd"></canvas>
+        </div>
+        <br>
+        
+        <table style="width:100%">
+            <tr>
+                <td class="appbox">
+                    <div class="appbox-title">WEEK</div>
+                    <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="week_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+                    
+                    <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="week_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
+                </td>
                 
-                <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="week_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
-            </td>
-            
-            <td class="appbox">
-                <div class="appbox-title">MONTH</div>
-                <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="month_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+                <td class="appbox">
+                    <div class="appbox-title">MONTH</div>
+                    <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="month_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+                    
+                    <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="month_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
+                </td>
                 
-                <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="month_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
-            </td>
-            
-            <td class="appbox">
-                <div class="appbox-title">YEAR</div>
-                <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="year_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+                <td class="appbox">
+                    <div class="appbox-title">YEAR</div>
+                    <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="year_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+                    
+                    <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="year_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
+                </td>
                 
-                <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="year_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
-            </td>
-            
-            <td class="appbox">
-                <div class="appbox-title">ALL</div>
-                <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="alltime_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
-                
-                <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="alltime_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
-            </td>
-        </tr>
-    </table>
-    
-  </div></div>
-  
-</div>   
+                <td class="appbox">
+                    <div class="appbox-title">ALL</div>
+                    <div><span class="appbox-value u1a" style="color:#0699fa">£</span><span class="appbox-value" id="alltime_kwh" style="color:#0699fa">---</span> <span class="units appbox-units u1b" style="color:#0779c1">kWh</span></div>
+                    
+                    <div style="padding-top:5px; color:#0779c1" class="appbox-units" ><span class="units u2a"></span><span id="alltime_kwhd">---</span><span class="units u2b"> kWh/d</span></div>
+                </td>
+            </tr>
+        </table>
+    </div></div>
+</div>
 
 <div id="app-setup" style="display:none; padding-top:50px" class="block">
     <h2 class="appconfig-title">Energy Consumption</h2>
@@ -234,13 +229,17 @@ function init() {
         update();
     });
     
-    $(".unit-select-cost").click(function(){
+    $("#unit-select-cost").click(function(){
+        $("#unit-select-cost").html('<b>Cost</b>');
+        $("#unit-select-kwh").html('kWh');
         viewMode = "cost";
         redraw = true;
         update();
     });
     
-    $(".unit-select-kwh").click(function(){
+    $("#unit-select-kwh").click(function(){
+        $("#unit-select-cost").html('Cost');
+        $("#unit-select-kwh").html('<b>kWh</b>');
         viewMode = "energy";
         redraw = true;
         update();
@@ -272,19 +271,19 @@ function resize() {
     
     var width = $("#placeholder_bound_kwhd").width();
     $("#placeholder_kwhd").attr('width',width);
-    barGraph.width = width;
+    energyGraph.width = width;
     
     var height = $("#placeholder_bound_kwhd").height();
     $("#placeholder_kwhd").attr('height',height); 
-    barGraph.height = height;
+    energyGraph.height = height;
     
     var width = $("#placeholder_bound_power").width();
     $("#placeholder_power").attr('width',width);
-    lineGraph.width = width;
+    powerGraph.width = width;
     
     var height = $("#placeholder_bound_power").height();
     $("#placeholder_power").attr('height',height); 
-    lineGraph.height = height;
+    powerGraph.height = height;
     
     if (width <= 500) {
         $(".electric-title").css("font-size", "16px");
@@ -384,7 +383,7 @@ function update() {
             var interval = 86400000;
             var now = new Date();
             var end = now.getTime();
-            var start = end - interval * Math.round(barGraph.width/days);
+            var start = end - interval * Math.round(energyGraph.width/days);
             
             data.loadDailyEnergy(start, end, function(result) {
                 drawEnergyGraph(result);
@@ -424,57 +423,23 @@ function drawPowerValues(power) {
 function drawPowerGraph(power) {
     var consPower = power.getData("cons_power");
     
-    var xtick;
-    var timeWindowHours = Math.round((view.end - view.start)/3600000);
-    if (timeWindowHours <= 12) {
-        xtick = 1*3600*1000;
-    }
-    else if (timeWindowHours <= 24) {
-        xtick = 2*3600*1000;
-    }
-    else if (timeWindowHours<=24*7) {
-        xtick = 24*3600*1000;
-    }
-    else {
-        xtick = 30*24*3600*1000;
-    }
-    
-    var options = {
-        axes: {
-            color: "rgba(6,153,250,1.0)",
-            font: "12px arial"
-        },
-        
-        xaxis: {
-            minor_tick: xtick/4,
-            major_tick: xtick
-        },
-        
-        yaxis: {
-            title: "Power (Watts)",
-            units: "W",
-            minor_tick: 250,
-            major_tick: 1000
-        }
-    };
-    
     var series = {
         "solar_power": {
-            color: "rgba(255,255,255,1.0)",
+            color: "rgba(255, 255, 255, 1.0)",
             data: []
         },
         "cons_power": {
-            color: "rgba(6,153,250,0.5)",
+            color: "rgba(6, 153, 250, 0.5)",
             data: consPower
         }
     };
     
-    lineGraph.draw("placeholder_power", series, options);
+    powerGraph.draw("placeholder_power", series, view.start, view.end);
     $(".ajax-loader").hide();
 }
 
 function drawEnergyValues(energy) {
-	var consEnergy = data.get("cons_energy");
+    var consEnergy = data.get("cons_energy");
     var latestTime = consEnergy.getLatestTime();
     var latestValue = consEnergy.getLatestValue();
     
@@ -506,8 +471,8 @@ function drawEnergyValues(energy) {
     var todayStart = consEnergy.getTimevalue(todayStartTime);
     if (todayStart == null || todayStart[1] == null) {
         todayStart = [
-        	consEnergy.getEarliestTime(),
-        	consEnergy.getEarliestValue()
+            consEnergy.getEarliestTime(),
+            consEnergy.getEarliestValue()
         ];
     }
     var todayValue = scale*(latestValue - todayStart[1]);
@@ -535,8 +500,8 @@ function drawEnergyValues(energy) {
     var weekStart = consEnergy.getTimevalue(weekStartTime);
     if (weekStart == null || weekStart[1] == null) {
         weekStart = [
-        	consEnergy.getEarliestTime(),
-        	consEnergy.getEarliestValue()
+            consEnergy.getEarliestTime(),
+            consEnergy.getEarliestValue()
         ];
     }
     var weekEnergy = latestValue - weekStart[1];
@@ -550,8 +515,8 @@ function drawEnergyValues(energy) {
     var monthStart = consEnergy.getTimevalue(monthStartTime);
     if (monthStart == null || monthStart[1] == null) {
         monthStart = [
-        	consEnergy.getEarliestTime(),
-        	consEnergy.getEarliestValue()
+            consEnergy.getEarliestTime(),
+            consEnergy.getEarliestValue()
         ];
     }
     var monthEnergy = latestValue - monthStart[1];
@@ -565,8 +530,8 @@ function drawEnergyValues(energy) {
     var yearStart = consEnergy.getTimevalue(yearStartTime);
     if (yearStart == null || yearStart[1] == null) {
         yearStart = [
-        	consEnergy.getEarliestTime(),
-        	consEnergy.getEarliestValue()
+            consEnergy.getEarliestTime(),
+            consEnergy.getEarliestValue()
         ];
     }
     var yearEnergy = latestValue - yearStart[1];
@@ -612,7 +577,7 @@ function drawEnergyGraph(energy) {
     var now = new Date();
     now.setHours(0,0,0,0);
     var end = now.getTime();
-    var start = end - interval * Math.round(barGraph.width/days);
+    var start = end - interval * Math.round(energyGraph.width/days);
     
     daily = [];
     for (var day of energy.iterateDailyEnergy(start, end)) {
@@ -625,7 +590,7 @@ function drawEnergyGraph(energy) {
         }
     }
     
-    barGraph.draw('placeholder_kwhd', [daily], unit);
+    energyGraph.draw('placeholder_kwhd', [daily], unit);
     $(".ajax-loader").hide();
 }
 

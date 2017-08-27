@@ -10,8 +10,8 @@
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/feed.js?v=<?php echo $v; ?>"></script>
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/timeseries.js?v=<?php echo $v; ?>"></script> 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_bars.js?v=<?php echo $v; ?>"></script> 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_lines.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_energy.js?v=<?php echo $v; ?>"></script> 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/app/lib/graph_power.js?v=<?php echo $v; ?>"></script> 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/vis.helper.js?v=<?php echo $v; ?>"></script> 
 
 <div id="app-block" style="display:none">
@@ -21,10 +21,10 @@
     <div style="height:20px; border-bottom:1px solid #333; padding-bottom:8px;">
     
         <div style="float:left; color:#aaa">
-        <span class="myelectric-view-cost" >Cost</span> | 
-        <span class="myelectric-view-kwh" >kWh</span>
+            <span id="myelectric-view-cost" style="cursor:pointer">Cost</span> | 
+            <span id="myelectric-view-kwh" style="cursor:pointer"><b>kWh</b></span>
         </div>
-    
+        
         <div style="float:right;">
             <i class="openconfig icon-wrench icon-white" style="cursor:pointer; padding-right:5px"></i>
         </div>
@@ -219,13 +219,17 @@ function init()
         updateFast();
     });
     
-    $(".myelectric-view-cost").click(function(){
+    $("#myelectric-view-cost").click(function(){
+        $("#myelectric-view-cost").html('<b>Cost</b>');
+        $("#myelectric-view-kwh").html('kWh');
         viewmode = "cost";
         updateFast();
         updateSlow();
     });
     
-    $(".myelectric-view-kwh").click(function(){
+    $("#myelectric-view-kwh").click(function(){
+        $("#myelectric-view-cost").html('Cost');
+        $("#myelectric-view-kwh").html('<b>kWh</b>');
         viewmode = "energy";
         updateFast();
         updateSlow();
@@ -271,19 +275,19 @@ function resize()
     
     var width = $("#placeholder_bound_kwhd").width();
     $("#placeholder_kwhd").attr('width',width);
-    barGraph.width = width;
+    energyGraph.width = width;
     
     var height = $("#placeholder_bound_kwhd").height();
     $("#placeholder_kwhd").attr('height',height); 
-    barGraph.height = height;
+    energyGraph.height = height;
     
     var width = $("#placeholder_bound_power").width();
     $("#placeholder_power").attr('width',width);
-    lineGraph.width = width;
+    powerGraph.width = width;
     
     var height = $("#placeholder_bound_power").height();
     $("#placeholder_power").attr('height',height); 
-    lineGraph.height = height;
+    powerGraph.height = height;
     
     
     if (width<=500) {
@@ -409,33 +413,6 @@ function updateFast()
     }
     
     // draw power graph
-    var options = {
-        axes: {
-            color: "rgba(6,153,250,1.0)",
-            font: "12px arial"
-        },
-        
-        xaxis: {
-            minor_tick: 60000*10,
-            major_tick: 60000*60
-        },
-        
-        yaxis: {
-            title: "Power (Watts)",
-            units: "W",
-            minor_tick: 250,
-            major_tick: 1000
-        }
-    };
-    
-    var timewindowhours = Math.round((view.end-view.start)/3600000);
-    options.xaxis.major_tick = 30*24*3600*1000;
-    if (timewindowhours<=24*7) options.xaxis.major_tick = 24*3600*1000;
-    if (timewindowhours<=24) options.xaxis.major_tick = 2*3600*1000;
-    if (timewindowhours<=12) options.xaxis.major_tick = 1*3600*1000;
-    options.xaxis.minor_tick = options.xaxis.major_tick / 4;
-    
-    
     var series = {
         "solar": {
             color: "rgba(255,255,255,1.0)",
@@ -447,7 +424,7 @@ function updateFast()
         }
     };
     
-    lineGraph.draw("placeholder_power",series,options);
+    powerGraph.draw("placeholder_power", series, view.start, view.end);
     $(".ajax-loader").hide();
 
     // --------------------------------------------------------------------------------------------------------
@@ -531,7 +508,7 @@ function updateSlow()
     var interval = 86400;
     var now = new Date();
     var end = Math.floor(now.getTime() * 0.001);
-    var start = end - interval * Math.round(barGraph.width/30);
+    var start = end - interval * Math.round(energyGraph.width/30);
     
     var result = feed.getDailyData(use_kwh, start*1000, end*1000);
 
@@ -580,7 +557,7 @@ function updateSlow()
         $("#usetoday").html((usetoday_kwh).toFixed(0));
     }
 
-    barGraph.draw('placeholder_kwhd',[daily]);
+    energyGraph.draw('placeholder_kwhd',[daily]);
     $(".ajax-loader").hide();
 }
 
