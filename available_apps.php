@@ -51,15 +51,29 @@ $available_apps = array (
         "title"=>"OpenEVSE",
         "description"=>"Explore OpenEVSE charging"
     ),
-    "energyconsdark"=>array(
+    "energycons"=>array(
         "status"=>"Development",
-        "title"=>"Energy consumption (dark)",
-        "description"=>"Household energy consumption in real time power and daily resolution, shown in kWh or money spent."
+        "title"=>"Energy consumption",
+        "description"=>"Explore a households energy consumption in kWh or by cost. Single days may be selected and their power data explored in detail.<br>Energy consumption can also be compared with the average UK household and ZeroCarbonBritain targets."
+    ),
+    "energycons_deprecated"=>array(
+        "status"=>"Development",
+        "title"=>"Energy and power consumption",
+        "description"=>"Explore a households energy consumption in kWh or by cost, for real time power and daily resolutions.<br><em>(This app is deprecated and should not be used anymore)</em>"
     )
-    
-    //"template"=>array(
-    //    "status"=>"Development",
-    //    "title"=>"Template",
-    //    "description"=>"A basic app example useful for developing new apps"
-    //)
+//     "selfcons_deprecated"=>array(
+//         "status"=>"Development",
+//         "title"=>"Solar energy self-consumption",
+//         "description"=>"Explore a households energy consumption compared to its generated solar energy.<br><em>(This app is deprecated and should not be used anymore)</em>"
+//     ),
+//     "selfcons_divert_deprecated"=>array(
+//         "status"=>"Development",
+//         "title"=>"Solar energy self-consumption with diversion",
+//         "description"=>"Explore a households energy consumption compared to its generated solar (and optionally wind) energy.<br>Excess generated power, which is diverted into a specific consumer, can be explored separately.<br><em>(This app is deprecated and should not be used anymore)</em>"
+//     )
+//     "template"=>array(
+//         "status"=>"Development",
+//         "title"=>"Template",
+//         "description"=>"A basic app example useful for developing new apps"
+//     )
 );

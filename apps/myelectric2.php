@@ -209,12 +209,12 @@ config.app = {
     "use": {
         "type":"feed", 
         "autoname":"use", 
-        "engine":"0,2,5"
+        "engine":"5"
     },
     "use_kwh": {
         "type":"feed", 
         "autoname":"use_kwh", 
-        "engine":"0,2,5"
+        "engine":"5"
     },
     "unitcost": {
         "type":"value", 

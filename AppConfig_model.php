@@ -40,7 +40,7 @@ class AppConfig
     public function add($userid,$app,$name) 
     {
         $userid = (int) $userid;
-        if (preg_replace('/[^\p{N}\p{L}]/u','',$app)!=$app) return array('success'=>false, "message"=>"Invalid app"); 
+        if (preg_replace('/[^\p{N}\p{L}_]/u','',$app)!=$app) return array('success'=>false, "message"=>"Invalid app"); 
         if (preg_replace('/[^\p{N}\p{L}_\s-:]/u','',$name)!=$name) return array('success'=>false, "message"=>"Invalid app name"); 
         
         // Load config from database
