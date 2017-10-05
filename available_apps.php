@@ -60,6 +60,11 @@ $available_apps = array (
         "status"=>"Development",
         "title"=>"Energy and power consumption",
         "description"=>"Explore a households energy consumption in kWh or by cost, for real time power and daily resolutions.<br><em>(This app is deprecated and should not be used anymore)</em>"
+    ),
+    "controldevices"=>array(
+        "status"=>"Development",
+        "title"=>"Device control",
+        "description"=>"Have a remote access to control your connected devices.<br>"
     )
 //     "selfcons_deprecated"=>array(
 //         "status"=>"Development",

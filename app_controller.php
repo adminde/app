@@ -13,12 +13,24 @@ function app_controller()
     include "Modules/app/AppConfig_model.php";
     $appconfig = new AppConfig($mysqli,$available_apps);
     
+    $feedid = (int) get('id');//
+    
     // ------------------------------------------------------------------------------------
     // API
     // ------------------------------------------------------------------------------------
     if ($route->action == "list" && $session['read']) {
         $route->format = "json";
         $result = $appconfig->applist($session['userid']);
+        
+     // Switch on/off feed power
+    }
+    else if ($route->action == 'powerswitch') {
+        $result = $appconfig->powerswitch($feedid, get('power_switch'), $session['userid']);
+        
+    // get feed power state
+    } else if($route->action == 'powerstate') {
+        $result = $appconfig->powerstate($feedid, $session['userid']);
+        
     }
     else if ($route->action == "add" && $session['write']) {
         $route->format = "json";
