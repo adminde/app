@@ -186,5 +186,29 @@ class AppConfig
         
         return $applist;
     }
+    
+    // ----------------------------------------------------------------------------------------------
+    // Switch on/off power
+    // ----------------------------------------------------------------------------------------------
+    public function powerswitch($feedid, $powerswitch, $userid)
+    {
+        $userid = (int) $userid;
+        
+        if($powerswitch == "on") {
+            $powerstate = "on";
+        } else if($powerswitch == "off") {
+            $powerstate = "off";
+        }
+        return array('powerState'=>$powerstate);
+    }
+    
+    // ----------------------------------------------------------------------------------------------
+    // Get power state
+    // ----------------------------------------------------------------------------------------------
+    public function powerstate($feedid, $userid)
+    {
+        $userid = (int) $userid;
+        return array('powerState'=>rand(0,1) > 0.5 ? "off" : "on");
+    }
 }
 
