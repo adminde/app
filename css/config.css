@@ -37,6 +37,12 @@
   width:100%;
 }
 
+.device-select-div {
+  margin:0px;
+  margin-top:5px;
+  width:100%;
+}
+
 select {
   background-color:#333;
   color:#fff;
