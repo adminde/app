@@ -233,30 +233,38 @@ function init() {
 	config.devices.forEach(function(d) {
 		$("#device-list").append(
 	          	"<div class='block-bound list-item device'>" +
-	          	"<div class='device-info'>" +
-	          	"<table class='device-controls' id='device" + d.id + "' style='width:100%'><tr>" +
-	              "<td>" +
-	                "<div class='block-title' style='color: grey;'>" + d.name + "</div>" +
-	              "</td>" +
-// 	              "<td>" +
-// 	                "<div class='block-title'>" + d.description + "</div>" +
-// 	              "</td>" +
-	         	"</tr>" +
-	         	"</table>" +
-
-	            "<table id='consumption" + d.id + "' style='width:100%'>" +
-	                 "<tr>" +
-	                    "<td style='width:40%'>" +
-                     		 "<span class='electric-title'><span id='power-now'>0</span></span>" +
-	                         "<span class='electric-title'>   NOW</span>" +
-	                     "</td>" +
-	                    "<td style='text-align:right'>" +
-                         	 "<span class='electric-title'>TODAY   </span>" +
-                         	 "<span class='electric-title'><span id='energy-today'>0</span></span>" +
-	                     "</td>" +
-	                 "</tr>" +
-	             "</table>" +
-	         	"</div>" +
+    	          	"<div class='device-info'>" +
+        	          	"<div class='device-controls'>" +
+            	          	"<table id='device" + d.id + "' style='width:100%'><tr>" +
+            	              "<td>" +
+            	                "<div class='block-title' style='color: grey;'>" + d.name + "</div>" +
+            	              "</td>" +
+            // 	              "<td>" +
+            // 	                "<div class='block-title'>" + d.description + "</div>" +
+            // 	              "</td>" +
+            	         	"</tr>" +
+            	         	"</table>" +
+            
+            	         	"<div id='consumption" + d.id + "' style='padding:10px;'>" +
+                	            "<table style='width:100%'>" +
+                	                 "<tr>" +
+                	                    "<td style='width:15%'>" +
+                                     		 "<span class='electric-title'><span id='power-now'>0</span></span>" +
+                                 		"</td>" +
+                                 		"<td style='width:35%'>" +
+                	                         "<span class='electric-title'>NOW</span>" +
+                	                     "</td>" +
+                	                    "<td style='width:35%;text-align:right'>" +
+                                         	 "<span class='electric-title'>TODAY</span>" +
+                                     	"</td>" +
+                                     	"<td style='width:15%;text-align:right''>" +
+                                         	 "<span class='electric-title'><span id='energy-today'>0</span></span>" +
+                	                     "</td>" +
+                	                 "</tr>" +
+                	             "</table>" +
+            	         	"</div>" +
+        	         	"</div>" +
+    	         	"</div>" +
 	         	
 // 	         	"<div class='panel-group block-content'>" +
 // 	            "<div class='panel panel-default'>" +
