@@ -296,7 +296,7 @@ function init() {
         		$("#device" + d.id).append(
         	    		"<table class='device-control' id='" + d.id + "_" + c.id + "' style='width:100%'><tr>" +
     	                "<td class='control-label name'>" +
-    	              	  "<span>" + c.name + "</span>" +
+    	              	  "<span>" + c.label + "</span>" +
     	                "</td>" +
     	                "<td class='control-label left'>" +
     	              	  "<span>Off</span>" +
@@ -313,28 +313,27 @@ function init() {
                       "</td>" +
     	              "</tr></table>"
               	);
-			} else if(c.type === "Number") {
+			} else if(c.type === "Text") {
 				$("#device" + d.id).append(
     	    		  "<table class='device-control' id='" + d.id + "_" + c.id + "' style='width:100%'><tr>" +
 	                  "<td class='control-label name'>" +
-	              	    "<span>" + c.name + "</span>" +
+	              	    "<span>" + c.label + "</span>" +
 	                  "</td>" +
   	                "<td class='control-label left'>" +
 	                "</td>" +
 	        		  "<td class='control-label control'>" +
-	              	    "<input class='number' id='device" + d.id + "_output" + c.id + "' type='text' value=" + c.value + " />" +
+	              	    "<input class='number' id='device" + d.id + "_output" + c.id + "' type='text' value=" + (c.value ? c.value : 0).toFixed(c.format[2]) + " />" +
     	              "</td>" +
                       "<td class='control-label right'>" +
-                  	    "<span>" + c.unit + "</span>" +
+                  	    "<span>" + c.format.split(" ")[1] + "</span>" +
                       "</td>" +
     	              "</tr></table>"
               	);
 			}
-			
 			config.app["device" + d.id + "_output" + c.id] = {
 				     "type": "checkbox",
 				     "default": true,
-			         "name": d.name + ": " + c.name,
+			         "name": d.name + ": " + c.label,
 			         "description": "Control power state"
 			};
 
