@@ -24,8 +24,6 @@
 .app-header,
 .graph-header {
   display: table;
-  color: #fff;
-  background-color: #44b3e2;
 }
 .app-header > div,
 .graph-header > div {
@@ -47,10 +45,6 @@
   text-align: center;
   border-left: 1px solid rgba(255,255,255,0.333);
   cursor: pointer;
-}
-.app-header .action:hover,
-.graph-header .action:hover {
-  background-color: #2eaadf;
 }
 
 .app-body {
@@ -108,7 +102,6 @@
 .graph-body {
   position: relative;
   padding: 10px;
-  background-color: #44b3e210;
 }
 .graph-body .graph {
   min-height: 200px;
