@@ -12,13 +12,15 @@
 
 .app {
   font-family: Montserrat, Veranda, sans-serif;
-  padding: 0px !important;
 }
 
+#app-block {
+    padding: 0 0.7rem;
+}
 .app-block {
   padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .app-header,
@@ -66,11 +68,11 @@
   line-height: 1em;
 }
 .app-body .title {
-  font-size: 22px;
+  font-size: 14px;
   font-weight: bold;
 }
 .app-body .value {
-  font-size: 52px;
+  font-size: 30px;
   font-weight: bold;
 }
 .app-body .consumption {
@@ -166,62 +168,101 @@
   width: 100%;
 }
 
-@media (max-width: 450px) {
-  .app-block {
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+/* -------------------------------------------------------------------
+   MOBILE FIRST:
+
+   Extra small devices (portrait phones, 320px and up)
+--------------------------------------------------------------------*/
+@media (ax-width: 400px) {
+  
+}
+
+@media (max-width: 576px) {
   .app-header .action,
   .app-header .title,
   .graph-header .action,
   .graph-header .title {
     font-size:12px;
     padding:8px;
-    min-width:15px;
+    min-width:20px;
   }
-  
   .dmy { display:none }
 }
 
-@media (max-width: 750px) {
+/* -------------------------------------------------------------------
+   Small devices (landscape phones, 576px and up)
+--------------------------------------------------------------------*/
+@media (max-width: 768px) {
   .app-body .generation,
   .graph-info .generation,
-  .graph-info .details { display: none !important; }
-  
-  /**/
-  .graph-header .power.time { display: none !important; }
+  .graph-info .details {
+    display: none !important;
+  }
+
+  .graph-header .power.time {
+    display: none !important;
+  }
 }
 
-@media (max-width: 850px) {
-  .app-body .selfcons { display: none !important; }
+/* -------------------------------------------------------------------
+   Medium devices (tablets, 768px and up)
+--------------------------------------------------------------------*/
+@media (max-width: 992px) {
+  .app-body .title {
+    font-size: 14px;
+  }
+  .app-body .value {
+    font-size: 30px;
+  }
 }
 
-@media (max-width: 950px) {
-  .app-body .title { font-size: 16px; }
-  .app-body .value { font-size: 38px; }
+/* -------------------------------------------------------------------
+   Large devices (desktops, 992px and up)
+--------------------------------------------------------------------*/
+@media (min-width: 992px) {
+  .app-body .title {
+    font-size: 16px;
+  }
+  .app-body .value {
+    font-size: 36px;
+  }
 }
 
-@media (min-width: 950px) and (max-width: 1050px) {
-  .app-body .title { font-size: 18px; }
-  .app-body .value { font-size: 42px; }
+@media (max-width: 1200px) {
+  .app-body .selfcons {
+    display: none !important;
+  }
 }
 
-@media (min-width: 1050px) and (max-width: 1150px) {
-  .app-body .title { font-size: 20px; }
-  .app-body .value { font-size: 48px; }
+/* -------------------------------------------------------------------
+   Extra large devices (large desktops, 1200px and up)
+--------------------------------------------------------------------*/
+@media (min-width: 1200px) {
+  .app-body .title {
+    font-size: 18px;
+  }
+  .app-body .value {
+    font-size: 42px;
+  }
 }
 
-@media (min-width: 1150px) and (max-width: 1250px) {
-  .app-body .title { font-size: 16px; }
-  .app-body .value { font-size: 38px; }
+@media (min-width: 1300px) {
+  .app-body .title {
+    font-size: 20px;
+  }
+  .app-body .value {
+    font-size: 48px;
+  }
 }
 
 @media (max-width: 1300px) {
-  .graph-info .self { display: none !important; }
+  .graph-info .self {
+    display: none !important;
+  }
 }
 
-@media (min-width: 1250px) and (max-width: 1400px) {
-  .app-body .title { font-size: 18px; }
-  .app-body .value { font-size: 42px; }
+@media (max-width: 1400px) {
+  .graph-info .window {
+    font-size: 14px;
+  }
 }

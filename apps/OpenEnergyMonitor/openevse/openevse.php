@@ -1,6 +1,6 @@
 <?php
     global $path, $session;
-    $v = 5;
+    $v = 7;
 ?>
 <link href="<?php echo $path; ?>Modules/app/Views/css/config.css?v=<?php echo $v; ?>" rel="stylesheet">
 <link href="<?php echo $path; ?>Modules/app/Views/css/light.css?v=<?php echo $v; ?>" rel="stylesheet">
@@ -16,18 +16,6 @@
 <script type="text/javascript" src="<?php echo $path; ?>Modules/app/Lib/vis.helper.js?v=<?php echo $v; ?>"></script>
 
 <style>
-.electric-title {
-    font-weight:bold;
-    font-size:22px;
-    color:#44b3e2;
-}
-
-.power-value {
-    font-weight:bold; 
-    font-size:52px; 
-    color:#44b3e2;
-    line-height: 1.1;
-}
 
 .block-bound {
   background-color:rgb(68,179,226);
@@ -40,9 +28,9 @@
 
   <div class="col1"><div class="col1-inner">
     <div class="block-bound">
-      <div class="bluenav app-setup"><i class="icon-wrench icon-white"></i></div>
-      <!--<div class="bluenav cost">Cost</div>
-      <div class="bluenav energy">Energy</div>-->
+      <div class="appnav app-setup"><i class="icon-wrench icon-white"></i></div>
+      <!--<div class="appnav cost">Cost</div>
+      <div class="appnav energy">Energy</div>-->
       <div class="block-title">OPENEVSE</div>
     </div>
 
@@ -50,12 +38,12 @@
       <table style="width:100%">
         <tr>
           <td style="width:40%">
-              <div class="electric-title">CHARGE RATE</div>
-              <div class="power-value"><span id="power_now">0</span>W</div>
+              <div class="app-title">CHARGE RATE</div>
+              <div class="app-title-value"><span id="power_now">0</span>W</div>
           </td>
           <td style="text-align:right">
-              <div class="electric-title">CHARGE TODAY</div>
-              <div class="power-value"><span id="kwh_today">0</span> kWh</div>
+              <div class="app-title">CHARGE TODAY</div>
+              <div class="app-title-value"><span id="kwh_today">0</span> kWh</div>
           </td>
         </tr>
       </table>
@@ -67,21 +55,21 @@
     <div class="block-bound">
     
       <div class="bargraph-navigation">
-        <!--<div class="bluenav bargraph-other">OTHER</div>-->
-        <div class="bluenav bargraph-alltime">ALL TIME</div>
-        <div class="bluenav bargraph-month">MONTH</div>
-        <div class="bluenav bargraph-week">WEEK</div>
+        <!--<div class="appnav bargraph-other">OTHER</div>-->
+        <div class="appnav bargraph-alltime">ALL TIME</div>
+        <div class="appnav bargraph-month">MONTH</div>
+        <div class="appnav bargraph-week">WEEK</div>
       </div>
       
       <div class="powergraph-navigation" style="display:none">
-        <div class="bluenav viewhistory">VIEW HISTORY</div>
-        <span class="bluenav" id="right" >></span>
-        <span class="bluenav" id="left" ><</span>
-        <span class="bluenav" id="zoomout" >-</span>
-        <span class="bluenav" id="zoomin" >+</span>
-        <span class="bluenav time" time='720'>M</span>
-        <span class="bluenav time" time='168'>W</span>
-        <span class="bluenav time" time='24'>D</span>
+        <div class="appnav viewhistory">VIEW HISTORY</div>
+        <span class="appnav" id="right" >></span>
+        <span class="appnav" id="left" ><</span>
+        <span class="appnav" id="zoomout" >-</span>
+        <span class="appnav" id="zoomin" >+</span>
+        <span class="appnav time" time='720'>M</span>
+        <span class="appnav time" time='168'>W</span>
+        <span class="appnav time" time='24'>D</span>
       </div>
         
       <div class="block-title">HISTORY</div>
@@ -95,7 +83,7 @@
     </div>
           
     <div id="power-graph-footer" style="background-color:#eee; color:#333; display:none">
-      <div id='advanced-toggle' class='bluenav' >SHOW DETAIL</div>
+      <div id='advanced-toggle' class='appnav' >SHOW DETAIL</div>
  
        <div style="padding:10px;">
         kWh in window: <b id="window-kwh"></b> <b>kWh</b>
@@ -152,7 +140,7 @@
 var path = "<?php print $path; ?>";
 var apikey = "<?php print $apikey; ?>";
 var sessionwrite = <?php echo $session['write']; ?>;
-if (!sessionwrite) $(".app-setup").hide();
+if (!sessionwrite) $(".config-open").hide();
 
 var feed = new Feed(apikey);
 
@@ -555,22 +543,22 @@ function resize() {
     placeholder.height(height-top_offset);
     
     if (width<=500) {
-        $(".electric-title").css("font-size","16px");
-        $(".power-value").css("font-size","38px");
+        $(".app-title").css("font-size","16px");
+        $(".app-title-value").css("font-size","38px");
         //$(".midtext").css("font-size","14px");
         //$(".units").hide();
         //$(".visnav").css("padding-left","5px");
         // $(".visnav").css("padding-right","5px");
     } else if (width<=724) {
-        $(".electric-title").css("font-size","18px");
-        $(".power-value").css("font-size","52px");
+        $(".app-title").css("font-size","18px");
+        $(".app-title-value").css("font-size","52px");
         /*$(".midtext").css("font-size","18px");
         $(".units").show();
         $(".visnav").css("padding-left","8px");
         $(".visnav").css("padding-right","8px");*/
     } else {
-        $(".electric-title").css("font-size","22px");
-        $(".power-value").css("font-size","52px");
+        $(".app-title").css("font-size","22px");
+        $(".app-title-value").css("font-size","52px");
         /*$(".midtext").css("font-size","20px");
         $(".units").show();
         $(".visnav").css("padding-left","8px");

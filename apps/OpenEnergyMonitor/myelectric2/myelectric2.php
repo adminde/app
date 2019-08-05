@@ -1,6 +1,6 @@
 <?php
     global $path, $session;
-    $v = 5;
+    $v = 7;
 ?>
 <link href="<?php echo $path; ?>Modules/app/Views/css/config.css?v=<?php echo $v; ?>" rel="stylesheet">
 <link href="<?php echo $path; ?>Modules/app/Views/css/light.css?v=<?php echo $v; ?>" rel="stylesheet">
@@ -17,39 +17,26 @@
 
 <style>
 
-.electric-title {
-    font-weight:bold;
-    font-size:22px;
-    color:#44b3e2;
-}
-
-.power-value {
-    font-weight:bold; 
-    font-size:52px; 
-    color:#44b3e2;
-    line-height: 1.1;
-}
-
 .units {
     font-size:75%;
 }
 
 .block-bound {
-  background-color:rgb(68,179,226);
+    background-color:rgb(68,179,226);
 }
 
 </style>
 
 <div style="font-family: Montserrat, Veranda, sans-serif;">
-<div id="app-container" style="display:none">
-    
+<div id="app-block" style="display:none">
+
   <div id="myelectric-realtime" class="col1"><div class="col1-inner">
-      
+
     <div class="block-bound">
-      <div class="bluenav app-setup"><i class="icon-wrench icon-white"></i></div>
-      <div class="bluenav viewcostenergy">VIEW COST</div>
-      <!--<div class="bluenav cost">Cost</div>-->
-      <!--<div class="bluenav energy">Energy</div>-->
+      <div class="appnav config-open"><i class="icon-wrench icon-white"></i></div>
+      <div class="appnav viewcostenergy">VIEW COST</div>
+      <!--<div class="appnav cost">Cost</div>-->
+      <!--<div class="appnav energy">Energy</div>-->
       <div id="app-title" class="block-title">MY ELECTRIC</div>
     </div>
 
@@ -57,12 +44,12 @@
       <table style="width:100%">
         <tr>
           <td style="width:40%">
-              <div class="electric-title">NOW</div>
-              <div class="power-value"><span id="power_now">0</span></div>
+              <div class="app-title">NOW</div>
+              <div class="app-title-value"><span id="power_now">0</span></div>
           </td>
           <td style="text-align:right">
-              <div class="electric-title">TODAY</div>
-              <div class="power-value"><span id="kwh_today">0</span></div>
+              <div class="app-title">TODAY</div>
+              <div class="app-title-value"><span id="kwh_today">0</span></div>
           </td>
         </tr>
       </table>
@@ -74,21 +61,21 @@
     <div class="block-bound">
     
       <div class="bargraph-navigation">
-        <!--<div class="bluenav bargraph-other">OTHER</div>-->
-        <div class="bluenav bargraph-alltime">ALL TIME</div>
-        <div class="bluenav bargraph-month">MONTH</div>
-        <div class="bluenav bargraph-week">WEEK</div>
+        <!--<div class="appnav bargraph-other">OTHER</div>-->
+        <div class="appnav bargraph-alltime">ALL TIME</div>
+        <div class="appnav bargraph-month">MONTH</div>
+        <div class="appnav bargraph-week">WEEK</div>
       </div>
       
       <div class="powergraph-navigation" style="display:none">
-        <div class="bluenav viewhistory">VIEW HISTORY</div>
-        <span class="bluenav" id="right" >></span>
-        <span class="bluenav" id="left" ><</span>
-        <span class="bluenav" id="zoomout" >-</span>
-        <span class="bluenav" id="zoomin" >+</span>
-        <span class="bluenav time" time='720'>M</span>
-        <span class="bluenav time" time='168'>W</span>
-        <span class="bluenav time" time='24'>D</span>
+        <div class="appnav viewhistory">VIEW HISTORY</div>
+        <span class="appnav" id="right" >></span>
+        <span class="appnav" id="left" ><</span>
+        <span class="appnav" id="zoomout" >-</span>
+        <span class="appnav" id="zoomin" >+</span>
+        <span class="appnav time" time='720'>M</span>
+        <span class="appnav time" time='168'>W</span>
+        <span class="appnav time" time='24'>D</span>
       </div>
         
       <div class="block-title">HISTORY</div>
@@ -102,7 +89,7 @@
     </div>
           
     <div id="power-graph-footer" style="background-color:#eee; color:#333; display:none">
-      <div id='advanced-toggle' class='bluenav' >SHOW DETAIL</div>
+      <div id='advanced-toggle' class='appnav' >SHOW DETAIL</div>
  
        <div style="padding:10px;">
         kWh in window: <b id="window-kwh"></b> <b id="window-cost"></b>
@@ -149,28 +136,29 @@
       </div>
       
     </div>
-    
+
   </div></div>
-    
-</div>    
+
+</div>
 </div>
 
-<div id="app-setup" class="block">
-    <h2 class="app-config-title">My Electric 2</h2>
-
-    <div class="app-config-description">
-      <div class="app-config-description-inner">
-        The My Electric app is a simple home energy monitoring app for exploring home or building electricity consumption over time.
-        <br><br>
-        <b>Auto configure:</b> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.
-        <br><br>
-        <b>Cumulative kWh</b> feeds can be generated from power feeds with the power_to_kwh input processor.
-        <br><br>
-        <img src="../Modules/app/images/myelectric_app.png" style="width:600px" class="img-rounded">
-      </div>
+<section id="app-setup" class="hide pb-3">
+    <!-- instructions and settings -->
+    <div class="px-3">
+        <div class="row-fluid">
+            <div class="span9 app-config-description">
+                <div class="app-config-description-inner text-dark">
+                    <h2 class="app-config-title text-primary"><?php echo _('My Electric 2'); ?></h2>
+                    <p class="lead">The My Electric app is a simple home energy monitoring app for exploring home or building electricity consumption over time.</p>
+                    <p><strong class="text-black">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
+                    <p><strong class="text-black">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
+                    <img src="../Modules/app/images/myelectric_app.png" class="d-none d-sm-inline-block">
+                </div>
+            </div>
+            <div class="span3 app-config pt-3"></div>
+        </div>
     </div>
-    <div class="app-config"></div>
-</div>
+</section>
 
 <div class="ajax-loader"></div>
 
@@ -182,7 +170,7 @@
 var path = "<?php print $path; ?>";
 var apikey = "<?php print $apikey; ?>";
 var sessionwrite = <?php echo $session['write']; ?>;
-if (!sessionwrite) $(".app-setup").hide();
+if (!sessionwrite) $(".config-open").hide();
 
 var feed = new Feed(apikey);
 
@@ -191,7 +179,7 @@ var feed = new Feed(apikey);
 // ----------------------------------------------------------------------
 config.app = {
     "title":{"type":"value", "default":"MY ELECTRIC", "name": "Title", "description":"Optional title for app"},
-    "use":{"type":"feed", "autoname":"use", "engine":"5"},
+    "use":{"type":"feed", "autoname":"use", "engine":5},
     "use_kwh":{"type":"feed", "autoname":"use_kwh", "engine":5},
     "unitcost":{"type":"value", "default":0.1508, "name": "Unit cost", "description":"Unit cost of electricity &pound;/kWh"},
     "currency":{"type":"value", "default":"£", "name": "Currency", "description":"Currency symbol (&pound;,&euro;,&dollar;,..)"},
@@ -234,8 +222,7 @@ var use_start = 0;
 
 config.init();
 
-function init()
-{
+function init() {
     // Quick translation of feed ids
     feeds = {};
     for (var key in config.app) {
@@ -275,8 +262,7 @@ function hide() {
     clearInterval(updateTimer);
 }
 
-function update()
-{
+function update() {
     feed.getListById(function(result) {
         if (result === null) { return; }
         
@@ -789,14 +775,14 @@ function resize() {
     placeholder.height(height-top_offset);
     
     if (width<=500) {
-        $(".electric-title").css("font-size","16px");
-        $(".power-value").css("font-size","38px");
+        $(".app-title").css("font-size","16px");
+        $(".app-title-value").css("font-size","38px");
     } else if (width<=724) {
-        $(".electric-title").css("font-size","18px");
-        $(".power-value").css("font-size","52px");
+        $(".app-title").css("font-size","18px");
+        $(".app-title-value").css("font-size","52px");
     } else {
-        $(".electric-title").css("font-size","22px");
-        $(".power-value").css("font-size","52px");
+        $(".app-title").css("font-size","22px");
+        $(".app-title-value").css("font-size","52px");
     }
 }
 

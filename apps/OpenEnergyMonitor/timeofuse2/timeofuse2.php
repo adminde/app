@@ -1,6 +1,6 @@
 <?php
     global $path, $session;
-    $v = 5;
+    $v = 7;
 ?>
 <link href="<?php echo $path; ?>Modules/app/Views/css/config.css?v=<?php echo $v; ?>" rel="stylesheet">
 <link href="<?php echo $path; ?>Modules/app/Views/css/light.css?v=<?php echo $v; ?>" rel="stylesheet">
@@ -18,19 +18,6 @@
 
 <style>
 
-.electric-title {
-    font-weight:bold;
-    font-size:22px;
-    color:#44b3e2;
-}
-
-.power-value {
-    font-weight:bold; 
-    font-size:42px; 
-    color:#44b3e2;
-    line-height: 1.1;
-}
-
 .block-bound {
   background-color:rgb(68,179,226);
 }
@@ -43,10 +30,10 @@
   <div class="col1"><div class="col1-inner">
   
     <div class="block-bound">
-      <div class="bluenav app-setup"><i class="icon-wrench icon-white"></i></div>
-      <div class="bluenav viewcostenergy">ENERGY MODE</div>
-      <!--<div class="bluenav cost">Cost</div>
-      <div class="bluenav energy">Energy</div>-->
+      <div class="appnav app-setup"><i class="icon-wrench icon-white"></i></div>
+      <div class="appnav viewcostenergy">ENERGY MODE</div>
+      <!--<div class="appnav cost">Cost</div>
+      <div class="appnav energy">Energy</div>-->
       <div class="block-title">TIME OF USE</div>
     </div>
 
@@ -54,12 +41,12 @@
       <table style="width:100%">
         <tr>
           <td style="width:40%">
-              <div class="electric-title">POWER NOW</div>
-              <div class="power-value"><span id="power_now">0</span></div>
+              <div class="app-title">POWER NOW</div>
+              <div class="app-title-value"><span id="power_now">0</span></div>
           </td>
           <td style="text-align:right">
-              <div class="electric-title">USE TODAY</div>
-              <div class="power-value"><span id="kwh_today">0</span></div>
+              <div class="app-title">USE TODAY</div>
+              <div class="app-title-value"><span id="kwh_today">0</span></div>
           </td>
         </tr>
       </table>
@@ -71,21 +58,21 @@
     <div class="block-bound">
     
       <div class="bargraph-navigation">
-        <!--<div class="bluenav bargraph-other">OTHER</div>-->
-        <div class="bluenav bargraph-alltime">ALL TIME</div>
-        <div class="bluenav bargraph-month">MONTH</div>
-        <div class="bluenav bargraph-week">WEEK</div>
+        <!--<div class="appnav bargraph-other">OTHER</div>-->
+        <div class="appnav bargraph-alltime">ALL TIME</div>
+        <div class="appnav bargraph-month">MONTH</div>
+        <div class="appnav bargraph-week">WEEK</div>
       </div>
       
       <div class="powergraph-navigation" style="display:none">
-        <div class="bluenav viewhistory">VIEW HISTORY</div>
-        <span class="bluenav" id="right" >&gt;</span>
-        <span class="bluenav" id="left" >&lt;</span>
-        <span class="bluenav" id="zoomout" >-</span>
-        <span class="bluenav" id="zoomin" >+</span>
-        <span class="bluenav time" time='720'>M</span>
-        <span class="bluenav time" time='168'>W</span>
-        <span class="bluenav time" time='24'>D</span>
+        <div class="appnav viewhistory">VIEW HISTORY</div>
+        <span class="appnav" id="right" >&gt;</span>
+        <span class="appnav" id="left" >&lt;</span>
+        <span class="appnav" id="zoomout" >-</span>
+        <span class="appnav" id="zoomin" >+</span>
+        <span class="appnav time" time='720'>M</span>
+        <span class="appnav time" time='168'>W</span>
+        <span class="appnav time" time='24'>D</span>
       </div>
         
       <div class="block-title">HISTORY</div>
@@ -99,7 +86,7 @@
     </div>
           
     <div id="power-graph-footer" style="background-color:#eee; color:#333; display:none">
-      <div id='advanced-toggle' class='bluenav' >SHOW DETAIL</div>
+      <div id='advanced-toggle' class='appnav' >SHOW DETAIL</div>
  
        <div style="padding:10px;">
         kWh in window: <b id="window-kwh"></b> <b>kWh</b>
@@ -134,8 +121,8 @@
       
       <div style="background-color:rgba(68,179,226,0.1); padding:20px; color:#333;">
           <span id="totals">
-          <div class="electric-title">TIER 0 TOTAL</div>
-          <div class="power-value">0</div><br>
+          <div class="app-title">TIER 0 TOTAL</div>
+          <div class="app-title-value">0</div><br>
           </span>
       </div>
     </div>
@@ -149,8 +136,8 @@
       
       <div style="background-color:rgba(68,179,226,0.1); padding:20px; color:#333;">
           <span id="averages">
-          <div class="electric-title">TIER 0 DAILY AVERAGE</div>
-          <div class="power-value">0</div><br>
+          <div class="app-title">TIER 0 DAILY AVERAGE</div>
+          <div class="app-title-value">0</div><br>
           </span>
       </div>
     </div>
@@ -159,47 +146,67 @@
 </div>    
 </div>
 
-<div id="app-setup" class="block">
-    <h2 class="app-config-title">Time of Use - flexible</h2>
 
-    <div class="app-config-description">
-      <div class="app-config-description-inner">
-        <p>The "Time of Use - flexible" app is a simple home energy monitoring app for exploring home or building
-        electricity consumption and cost over time. It allows you to track multiple electricity tariffs as
-        used in Australia. </p>
-        <b>Cumulative kWh</b> feeds can be generated from power feeds with the power_to_kwh input processor.
-        <br><br>
-        <img src="<?php echo $path; ?>Modules/app/images/timeofuse_app.png" style="width:600px" class="img-rounded">
-        <p>
-        As the number of configuration options for this are quite large, a shorthand has been used to specify
-        the tiers, days and times they apply and the respective costs.</p>
-        <p><b>Assumptions</b>:
-        <ul>
-        <li>Any number of tariffs can be defined, but they must be consistent across weekdays or weekends.</li>
-        <li>One cost must be defined per tariff tier.</li>
-        <li>Each weekday (Monday to Friday) has the same tiers and times for each tier.</li>
-        <li>Each weekend day (Saturday and Sunday) has the same tiers and times for each tier.</li>
-        <li>Public Holidays are treated the same as a weekend day.</li>
-        </ul>
-        <h4>Shorthand</h4>
-        <p>Tier names and tariffs are specified as a comma separated, colon separated list. If there are three
-        tariffs, Off Peak, Shoulder and Peak, costing 16.5c/kWh, 25.3c/kWh and 59.4c/kWh respectively, they
-        are specified as <b>OffPeak:0.165,Shoulder:0.253,Peak:0.594</b></p>
-        <p>Tier start times are split into two definitions, weekday and weekend. They both use the same format,
-        &lt;start hour&gt;:&lt;tier&gt;,&lt;start hour&gt;:&lt;tier&gt;,... <br>
-        &lt;tier&gt; is the tier number defined above, numbered from 0<br>
-        <b>Example:</b> A weekday with the following tariff times: OffPeak: 00:00 - 06:59, Shoulder: 07:00
-        - 13:59, Peak: 14:00 - 19:59, Shoulder: 20:00 - 21:59, OffPeak: 22:00 - 23:59 would be defined as
-        <b>0:0,7:1,14:2,20:1,22:0</b></p>
-        <p>To specify the public holidays that should be treated the same as weekends, specify a comma separated
-        list of days of the year (from 1-365/366) per year. <b>Example:</b> for public holiays 2017: Jan 2, Apr 14,
-        Apr 17, Apr 25, Jun 12, Oct 2, Dec 25, Dec 26; and 2018: Jan 1 you would specify
-        <b>2017:2,104,107,115,163,275,359,360;2018:1</b><br><a href="https://www.epochconverter.com/days">
-        https://www.epochconverter.com/days</a> provides an easy reference.</p>
-      </div>
+<section id="app-setup" class="hide pb-3 px-3">
+    <!-- instructions and settings -->
+    <div class="row-fluid">
+        <div class="span9 app-config-description">
+            <div class="app-config-description-inner text-dark">
+                <h2 class="app-config-title text-primary"><?php echo _('Time of Use - flexible'); ?></h2>
+                <p class="lead">The "Time of Use - flexible" app is a simple home energy monitoring app for exploring home or building electricity consumption and cost over time. It allows you to track multiple electricity tariffs as used in Australia.</p>
+                <h3 class="text-black">Cumulative kWh</h3> 
+                <p> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
+                <p><img src="<?php echo $path; ?>Modules/app/images/timeofuse_app.png" style="width:600px" class="img-rounded"></p>
+                <p>As the number of configuration options for this are quite large, a shorthand has been used to specify
+                the tiers, days and times they apply and the respective costs.</p>
+                
+                <h3 class="text-black">Assumptions</h3>
+                <ul>
+                    <li>Any number of tariffs can be defined, but they must be consistent across weekdays or weekends.</li>
+                    <li>One cost must be defined per tariff tier.</li>
+                    <li>Each weekday (Monday to Friday) has the same tiers and times for each tier.</li>
+                    <li>Each weekend day (Saturday and Sunday) has the same tiers and times for each tier.</li>
+                    <li>Public Holidays are treated the same as a weekend day.</li>
+                </ul>
+                
+                <h3 class="text-black">Shorthand</h3>
+                <p>Tier names and tariffs are specified as a comma separated, colon separated list. If there are three
+                tariffs, <strong class="text-grey">Off Peak</strong>, <strong class="text-grey">Shoulder</strong> and <strong class="text-grey">Peak</strong>, costing <strong class="text-grey">16.5c/kWh</strong>, <strong class="text-grey">25.3c/kWh</strong> and <strong class="text-grey">59.4c/kWh</strong> respectively, they
+                are specified as:</p>
+                <p><code>OffPeak:0.165,Shoulder:0.253,Peak:0.594</code></p>
+                <p>Tier start times are split into two definitions, weekday and weekend. They both use the same format,
+                <code>&lt;start hour&gt;:&lt;tier&gt;,&lt;start hour&gt;:&lt;tier&gt;,...
+                &lt;tier&gt;</code>
+                is the tier number defined above, numbered from 0</p>
+
+                <hr>
+                <h4 class="text-black">Example:</h4> 
+                <p>A weekday with the following tariff times:</p>
+                <blockquote><em>
+                OffPeak: 00:00 - 06:59, 
+                Shoulder: 07:00 - 13:59,
+                Peak: 14:00 - 19:59, 
+                Shoulder: 20:00 - 21:59, 
+                OffPeak: 22:00 - 23:59
+                </em></blockquote>
+                <p>would be defined as:
+                <code>0:0,7:1,14:2,20:1,22:0</code></p>
+
+                <p>To specify the public holidays that should be treated the same as weekends, specify a comma separated
+                list of days of the year (from 1-365/366) per year.
+                
+                <hr>
+                <h4 class="text-black">Example:</h4>
+                <p>for public holiays 2017: Jan 2, Apr 14, Apr 17, Apr 25, Jun 12, Oct 2, Dec 25, Dec 26; and 2018: Jan 1 you would specify:</p>
+                <code>
+                2017:2,104,107,115,163,275,359,360;2018:1
+                </code>
+                <p><a href="https://www.epochconverter.com/days" class="text-grey">https://www.epochconverter.com/days</a> provides an easy reference.</p>
+            </div>
+        </div>
+        <div class="span3 app-config pt-3"></div>
     </div>
-    <div class="app-config"></div>
-</div>
+</section>
 
 <div class="ajax-loader"></div>
 
@@ -211,7 +218,7 @@
 var path = "<?php print $path; ?>";
 var apikey = "<?php print $apikey; ?>";
 var sessionwrite = <?php echo $session['write']; ?>;
-if (!sessionwrite) $(".app-setup").hide();
+if (!sessionwrite) $(".config-open").hide();
 
 var feed = new Feed(apikey);
 
@@ -769,29 +776,29 @@ function bargraph_load(start,end)
     }
     
     if (viewcostenergy=="energy") {
-        var totals_str = '<div class="electric-title">COMBINED</div><div class="power-value">' +
+        var totals_str = '<div class="app-title">COMBINED</div><div class="app-title-value">' +
             total_kwh.toFixed(1) + ' kWh</div><br>';
-        var averages_str = '<div class="electric-title">COMBINED</div><div class="power-value">' +
+        var averages_str = '<div class="app-title">COMBINED</div><div class="app-title-value">' +
            (total_kwh/n).toFixed(1) + ' kWh/d</div><br>';
         for (var a = 0; a < tier_names.length; a++) {
-            totals_str += '<div class="electric-title">' + tier_names[a].toUpperCase() +
-               '</div><div class="power-value">' + tier_total_kwh[a].toFixed(1) + ' kWh</div><br>';
-            averages_str += '<div class="electric-title">' + tier_names[a].toUpperCase() +
-               '</div><div class="power-value">' + (tier_total_kwh[a]/n).toFixed(1) + ' kWh/d</div><br>';
+            totals_str += '<div class="app-title">' + tier_names[a].toUpperCase() +
+               '</div><div class="app-title-value">' + tier_total_kwh[a].toFixed(1) + ' kWh</div><br>';
+            averages_str += '<div class="app-title">' + tier_names[a].toUpperCase() +
+               '</div><div class="app-title-value">' + (tier_total_kwh[a]/n).toFixed(1) + ' kWh/d</div><br>';
         }
         $("#totals").html(totals_str);
         $("#averages").html(averages_str);
     } else {
-        var totals_str = '<div class="electric-title">COMBINED</div><div class="power-value">' +
+        var totals_str = '<div class="app-title">COMBINED</div><div class="app-title-value">' +
             config.app["currency"].value + total_kwh.toFixed(2) + '</div><br>';
-        var averages_str = '<div class="electric-title">COMBINED</div><div class="power-value">' +
+        var averages_str = '<div class="app-title">COMBINED</div><div class="app-title-value">' +
            config.app["currency"].value + (total_kwh/n).toFixed(2) + '/day</div><br>';
         for (var a = 0; a < tier_names.length; a++) {
-            totals_str += '<div class="electric-title">' + tier_names[a].toUpperCase() +
-               '</div><div class="power-value">' + config.app["currency"].value +
+            totals_str += '<div class="app-title">' + tier_names[a].toUpperCase() +
+               '</div><div class="app-title-value">' + config.app["currency"].value +
                tier_total_kwh[a].toFixed(2) + '</div><br>';
-            averages_str += '<div class="electric-title">' + tier_names[a].toUpperCase() +
-               '</div><div class="power-value">' + config.app["currency"].value +
+            averages_str += '<div class="app-title">' + tier_names[a].toUpperCase() +
+               '</div><div class="app-title-value">' + config.app["currency"].value +
                (tier_total_kwh[a]/n).toFixed(2) + '/day</div><br>';
         }
         $("#totals").html(totals_str);
@@ -881,14 +888,14 @@ function resize() {
     placeholder.height(height-top_offset);
     
     if (width<=500) {
-        $(".electric-title").css("font-size","16px");
-        $(".power-value").css("font-size","38px");
+        $(".app-title").css("font-size","16px");
+        $(".app-title-value").css("font-size","38px");
     } else if (width<=724) {
-        $(".electric-title").css("font-size","18px");
-        $(".power-value").css("font-size","42px");
+        $(".app-title").css("font-size","18px");
+        $(".app-title-value").css("font-size","42px");
     } else {
-        $(".electric-title").css("font-size","22px");
-        $(".power-value").css("font-size","42px");
+        $(".app-title").css("font-size","22px");
+        $(".app-title-value").css("font-size","42px");
     }
 }
 

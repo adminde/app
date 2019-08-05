@@ -1,6 +1,6 @@
 <?php
     global $path, $session;
-    $v = 5;
+    $v = 7;
 ?>
 <link href="<?php echo $path; ?>Modules/app/Views/css/config.css?v=<?php echo $v; ?>" rel="stylesheet">
 <link href="<?php echo $path; ?>Modules/app/Views/css/light.css?v=<?php echo $v; ?>" rel="stylesheet">
@@ -43,12 +43,12 @@
 </style>
 
 <div style="font-family: Montserrat, Veranda, sans-serif;">
-<div id="app-container" style="display:none">
+<div id="app-block" style="display:none">
 
   <div class="col1"><div class="col1-inner">
     <div class="block-bound">
       <div style="float:right">
-          <div class="config" style="padding-top:10px; padding-right:10px; cursor:pointer">
+          <div class="openconfig" style="padding-top:10px; padding-right:10px; cursor:pointer">
               <i class="icon-wrench icon-white"></i>
           </div>
       </div>
@@ -89,22 +89,22 @@
     <div class="block-bound">
     
       <div class="bargraph-navigation">
-        <!--<div class="bluenav bargraph-other">OTHER</div>-->
-        <div class="bluenav bargraph-alltime">ALL TIME</div>
-        <div class="bluenav bargraph-month">MONTH</div>
-        <div class="bluenav bargraph-week">WEEK</div>
+        <!--<div class="appnav bargraph-other">OTHER</div>-->
+        <div class="appnav bargraph-alltime">ALL TIME</div>
+        <div class="appnav bargraph-month">MONTH</div>
+        <div class="appnav bargraph-week">WEEK</div>
       </div>
       
       <div class="powergraph-navigation" style="display:none">
-        <div class="bluenav viewhistory">BACK</div>
-        <span class="bluenav" id="right" >></span>
-        <span class="bluenav" id="left" ><</span>
-        <span class="bluenav" id="zoomout" >-</span>
-        <span class="bluenav" id="zoomin" >+</span>
-        <span class="bluenav time dmy" time='720'>M</span>
-        <span class="bluenav time dmy" time='168'>W</span>
-        <span class="bluenav time" time='24'>D</span>
-        <span class="bluenav time" time='1'>H</span>
+        <div class="appnav viewhistory">BACK</div>
+        <span class="appnav" id="right" >></span>
+        <span class="appnav" id="left" ><</span>
+        <span class="appnav" id="zoomout" >-</span>
+        <span class="appnav" id="zoomin" >+</span>
+        <span class="appnav time dmy" time='720'>M</span>
+        <span class="appnav time dmy" time='168'>W</span>
+        <span class="appnav time" time='24'>D</span>
+        <span class="appnav time" time='1'>H</span>
       </div>
         
       <div class="block-title">HISTORY</div>       
@@ -117,7 +117,7 @@
     </div>
           
     <div style="background-color:#eee; color:#333">
-      <div id='advanced-toggle' class='bluenav' style="display:none" >SHOW DETAIL</div>
+      <div id='advanced-toggle' class='appnav' style="display:none" >SHOW DETAIL</div>
       
       <div style="padding:10px;">
         COP in window: <b id="window-cop"></b>
@@ -172,8 +172,8 @@
 
 </div>  
 </div>    
-  
-<div id="app-setup" class="block">
+
+<div id="app-setup" class="block py-2 px-5 hide">
     <h2 class="app-config-title">My Heatpump</h2>
 
     <div class="app-config-description">
@@ -200,9 +200,18 @@
 var path = "<?php print $path; ?>";
 var apikey = "<?php print $apikey; ?>";
 var sessionwrite = <?php echo $session['write']; ?>;
-if (!sessionwrite) $(".app-setup").hide();
 
 var feed = new Feed(apikey);
+
+// ----------------------------------------------------------------------
+// Display
+// ----------------------------------------------------------------------
+
+$(window).ready(function(){
+
+});
+
+if (!sessionwrite) $(".config-open").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -224,7 +233,7 @@ config.showapp = function(){show()};
 config.hideapp = function(){clear()};
 
 // ----------------------------------------------------------------------
-// Application
+// APPLICATION
 // ----------------------------------------------------------------------
 var meta = {};
 var data = {};
@@ -234,7 +243,7 @@ var previousPoint = false;
 var viewmode = "bargraph";
 var panning = false;
 var flot_font_size = 12;
-var updateTimer = false;
+var updaterinst = false;
 var elec_enabled = false;
 var heat_enabled = false;
 var feeds = {};
@@ -257,6 +266,7 @@ function init()
 
 function show() 
 {
+    $("body").css('background-color','WhiteSmoke');
     // -------------------------------------------------------------------------------
     // Configurations
     // -------------------------------------------------------------------------------
@@ -303,19 +313,19 @@ function show()
     
     // LOOP
     progtime = 0;
-    update();
-    updateTimer = setInterval(update, 10000);
+    updater();
+    updaterinst = setInterval(updater,10000);
     $(".ajax-loader").hide();
 }
 
 function clear()
 {
-    clearInterval(updateTimer);
+    clearInterval(updaterinst);
 }
 
-function update()
+function updater()
 {
-    feed.getListById(function(result) {
+    feed.getListById(function(result){
         if (result === null) { return; }
         
         for (var key in config.app) {
@@ -512,28 +522,28 @@ function powergraph_load()
     
     powergraph_series = [];
 
-    if (feeds["heatpump_flowT"]!=undefined) {
-        data["heatpump_flowT"] = feed.getData(feeds["heatpump_flowT"].id, start, end, interval, 1, 1);
+    if (feeds["heatpump_flowT"]!=undefined) { 
+        data["heatpump_flowT"] = feed.getData(feeds["heatpump_flowT"].id,start,end,interval,1,1);
         powergraph_series.push({label:"Flow T", data:data["heatpump_flowT"], yaxis:2, color:2});
     }
     if (feeds["heatpump_returnT"]!=undefined) {
-        data["heatpump_returnT"] = feed.getData(feeds["heatpump_returnT"].id, start, end, interval, 1, 1);
+        data["heatpump_returnT"] = feed.getData(feeds["heatpump_returnT"].id,start,end,interval,1,1);
         powergraph_series.push({label:"Return T", data:data["heatpump_returnT"], yaxis:2, color:3});
     }
     if (feeds["outside_temperature"]!=undefined) {
-        data["outside_temperature"] = feed.getData(feeds["outside_temperature"].id, start, end, interval, 1, 1);
+        data["outside_temperature"] = feed.getData(feeds["outside_temperature"].id,start,end,interval,1,1);
         powergraph_series.push({label:"Outside T", data:data["outside_temperature"], yaxis:2, color:4});
     }
     if (feeds["DHW_cylinderT"]!=undefined) {
-        data["DHW_cylinderT"] = feed.getData(feeds["DHW_cylinderT"].id, start, end, interval, 1, 1);
+        data["DHW_cylinderT"] = feed.getData(feeds["DHW_cylinderT"].id,start,end,interval,1,1);
         powergraph_series.push({label:"DHW Cylinder T", data:data["DHW_cylinderT"], yaxis:2, color:5});
     }
 
     if (feeds["heatpump_elec"]!=undefined) {
         // Where power feed is available
-        if (heat_enabled) data["heatpump_heat"] = feed.getData(feeds["heatpump_heat"].id, start, end, interval, 1, 1);
+        if (heat_enabled) data["heatpump_heat"] = feed.getData(feeds["heatpump_heat"].id,start,end,interval,1,1);
         if (heat_enabled) powergraph_series.push({label:"Heat Output", data:data["heatpump_heat"], yaxis:1, color:0, lines:{show:true, fill:0.2, lineWidth:0.5}});
-        if (elec_enabled) data["heatpump_elec"] = feed.getData(feeds["heatpump_elec"].id, start, end, interval, 1, 1);
+        if (elec_enabled) data["heatpump_elec"] = feed.getData(feeds["heatpump_elec"].id,start,end,interval,1,1);
         if (elec_enabled) powergraph_series.push({label:"Electric Input", data:data["heatpump_elec"], yaxis:1, color:1, lines:{show:true, fill:0.3, lineWidth:0.5}});
     } else {
         // Where no power feed available
@@ -546,7 +556,7 @@ function powergraph_load()
         end = Math.ceil(end/intervalms)*intervalms;
         
         if (heat_enabled) {
-            var tmp = feed.getData(feeds["heatpump_heat_kwh"].id, start, end, interval, 0, 0);
+            var tmp = feed.getData(feeds["heatpump_heat_kwh"].id,start,end,interval,0,0);
             data["heatpump_heat"] = [];
             for (var z=1; z<tmp.length; z++) {
                 var time = tmp[z-1][0];
@@ -559,7 +569,7 @@ function powergraph_load()
         }
         
         if (elec_enabled) {
-            var tmp = feed.getData(feeds["heatpump_elec_kwh"].id, start, end, interval, 0, 0);
+            var tmp = feed.getData(feeds["heatpump_elec_kwh"].id,start,end,interval,0,0);
             data["heatpump_elec"] = [];
             for (var z=1; z<tmp.length; z++) {
                 var time = tmp[z-1][0];
@@ -651,7 +661,7 @@ function bargraph_load(start,end)
         var heat_data = [];
         data["heatpump_heat_kwhd"] = [];
         
-        var heat_result = feed.getDailyData(feeds["heatpump_heat_kwh"].id, start, end);
+        var heat_result = feed.getDMYData(feeds["heatpump_heat_kwh"].id,start,end,"daily")
         // remove nan values from the end.
         for (var z in heat_result) {
           if (heat_result[z][1]!=null) heat_data.push(heat_result[z]);
@@ -689,7 +699,7 @@ function bargraph_load(start,end)
         var elec_data = [];
         data["heatpump_elec_kwhd"] = [];
         
-        var elec_result = feed.getDailyData(feeds["heatpump_elec_kwh"].id, start, end);
+        var elec_result = feed.getDMYData(feeds["heatpump_elec_kwh"].id,start,end,"daily");
         // remove nan values from the end.
         for (var z in elec_result) {
           if (elec_result[z][1]!=null) elec_data.push(elec_result[z]);
@@ -795,11 +805,8 @@ $(window).resize(function(){
 // ----------------------------------------------------------------------
 // App log
 // ----------------------------------------------------------------------
-function appLog(level, message) {
-    if (level == "ERROR") {
-        alert(level + ": " + message);
-    }
-    console.log(level + ": " + message);
+function app_log (level, message) {
+    if (level=="ERROR") alert(level+": "+message);
+    console.log(level+": "+message);
 }
-
 </script>
