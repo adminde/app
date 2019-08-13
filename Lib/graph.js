@@ -1,8 +1,8 @@
 const POWER = "power";
 const ENERGY = "energy"
-const IMPORT = "import";
-const EXPORT = "export";
-const SOLAR = "solar";
+const IMPORT = "import_energy";
+const EXPORT = "export_energy";
+const SOLAR = "solar_energy";
 
 class GraphView {
     constructor(path, container) {
@@ -559,10 +559,12 @@ class PowerGraph extends Graph {
 //                noColumns: 4
             }
         }
-        this.plot = $.plot($('.graph'), series, options);        
-        this.events();
+    	if (!$('.graph').is(":hidden")) {
+            this.plot = $.plot($('.graph'), series, options);        
+            this.events();
 
-        $(".graph-loader", this.view.container).hide();
+            $(".graph-loader", this.view.container).hide();
+    	}
     }
 
     events() {
