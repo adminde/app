@@ -174,11 +174,11 @@
     <!-- instructions and settings -->
     <div class="row-fluid">
         <div class="span9 app-config-description">
-            <div class="app-config-description-inner text-dark">
+            <div class="app-config-description-inner text-light">
                 <h2 class="app-config-title text-primary"><?php echo _('Time of Use'); ?></h2>
                 <p class="lead">The My Electric app is a simple home energy monitoring app for exploring home or building electricity consumption over time.</p>
-                <p><strong class="text-black">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
-                <p><strong class="text-black">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
+                <p><strong class="text-white">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
+                <p><strong class="text-white">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
             </div>
         </div>
         <div class="span3 app-config pt-3"></div>
@@ -209,7 +209,7 @@ $(window).ready(function(){
     //$("#footer").css('color','#999');
 });
 
-if (!sessionwrite) $(".config-open").hide();
+if (!sessionwrite) $(".openconfig").hide();
 
 // ----------------------------------------------------------------------
 // Configuration
@@ -350,27 +350,30 @@ $('#placeholder').bind("plothover", function (event, pos, item) {
             previousPoint = item.datapoint;
 
             $("#tooltip").remove();
-            var itemTime = item.datapoint[0];
-            var standard_kwh = bargraph_series[1].data[z][1];
-            var economy7_kwh = bargraph_series[0].data[z][1];
             
-            var d = new Date(itemTime);
-            var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-            var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            var date = days[d.getDay()]+", "+months[d.getMonth()]+" "+d.getDate();
-           
-            var text = "";
-            if (viewcostenergy=="energy") {
-                text = date+"<br>Day:"+(standard_kwh).toFixed(1)+" kWh<br>Night:"+(economy7_kwh).toFixed(1)+" kWh<br>Total:"+(economy7_kwh+standard_kwh).toFixed(1)+" kWh";
-            } else {
-                var daycost = config.app.currency.value+(standard_kwh*config.app.unitcost_day.value).toFixed(2);
-                var nightcost = config.app.currency.value+(economy7_kwh*config.app.unitcost_night.value).toFixed(2);
-                var totalcost = config.app.currency.value+((standard_kwh*config.app.unitcost_day.value)+(economy7_kwh*config.app.unitcost_night.value)).toFixed(2);
-                            
-                text = date+"<br>Day:"+(standard_kwh).toFixed(1)+" kWh ("+daycost+")<br>Night:"+(economy7_kwh).toFixed(1)+" kWh ("+nightcost+")<br>Total:"+(economy7_kwh+standard_kwh).toFixed(1)+" kWh ("+totalcost+")";
+            if (viewmode=="bargraph") {
+                var itemTime = item.datapoint[0];
+                var standard_kwh = bargraph_series[1].data[z][1];
+                var economy7_kwh = bargraph_series[0].data[z][1];
+                
+                var d = new Date(itemTime);
+                var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+                var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                var date = days[d.getDay()]+", "+months[d.getMonth()]+" "+d.getDate();
+               
+                var text = "";
+                if (viewcostenergy=="energy") {
+                    text = date+"<br>Day:"+(standard_kwh).toFixed(1)+" kWh<br>Night:"+(economy7_kwh).toFixed(1)+" kWh<br>Total:"+(economy7_kwh+standard_kwh).toFixed(1)+" kWh";
+                } else {
+                    var daycost = config.app.currency.value+(standard_kwh*config.app.unitcost_day.value).toFixed(2);
+                    var nightcost = config.app.currency.value+(economy7_kwh*config.app.unitcost_night.value).toFixed(2);
+                    var totalcost = config.app.currency.value+((standard_kwh*config.app.unitcost_day.value)+(economy7_kwh*config.app.unitcost_night.value)).toFixed(2);
+                                
+                    text = date+"<br>Day:"+(standard_kwh).toFixed(1)+" kWh ("+daycost+")<br>Night:"+(economy7_kwh).toFixed(1)+" kWh ("+nightcost+")<br>Total:"+(economy7_kwh+standard_kwh).toFixed(1)+" kWh ("+totalcost+")";
+                }
+                
+                tooltip(item.pageX, item.pageY, text, "#fff");
             }
-            
-            tooltip(item.pageX, item.pageY, text, "#fff");
         }
     } else $("#tooltip").remove();
 });

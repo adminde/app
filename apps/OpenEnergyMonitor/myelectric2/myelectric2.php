@@ -162,11 +162,11 @@
     <div class="px-3">
         <div class="row-fluid">
             <div class="span9 app-config-description">
-                <div class="app-config-description-inner text-dark">
+                <div class="app-config-description-inner text-light">
                     <h2 class="app-config-title text-primary"><?php echo _('My Electric 2'); ?></h2>
                     <p class="lead">The My Electric app is a simple home energy monitoring app for exploring home or building electricity consumption over time.</p>
-                    <p><strong class="text-black">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
-                    <p><strong class="text-black">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
+                    <p><strong class="text-white">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
+                    <p><strong class="text-white">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
                     <img src="../Modules/app/images/myelectric_app.png" class="d-none d-sm-inline-block">
                 </div>
             </div>
@@ -371,7 +371,8 @@ $('#placeholder').bind("plothover", function (event, pos, item) {
             if (viewcostenergy=="energy") {
                 text = date+"<br>"+(elec_kwh).toFixed(1)+" " + unit;
             } else {
-                text = date+"<br>"+(elec_kwh).toFixed(1)+" " + unit + " ("+config.app.currency.value+(elec_kwh*config.app.unitcost.value).toFixed(2)+")";
+                text = date+"<br>"+(elec_kwh).toFixed(1)+" " + unit;
+                if (unit=="kWh") text += " ("+config.app.currency.value+(elec_kwh*config.app.unitcost.value).toFixed(2)+")";
             }
             
             tooltip(item.pageX, item.pageY, text, "#fff");

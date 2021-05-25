@@ -2,33 +2,38 @@
    Config
 --------------------------------------------------------------------*/
 .app-config-box {
-  background-color: #ddd;
-  border: 1px solid #d1d1d1;
-  color: #333;
+  border: 1px solid #fff;
+  color: #fff;
 }
 .app-config-description-inner {
   padding-right: 20px;
-  color: #333;
+  color: #ccc;
 }
 
 .app-config select {
-  background-color: #fff;
-  color: #666;
+  background-color: #333;
+  color: #fff;
+}
+.app-config select optgroup {
+  background-color: #666;
 }
 .app-config input[type=text] {
-  background-color: #fff;
-  color: #666;
+  background-color: #333;
+  color: #fff;
+}
+.app-config .icon-app-config {
+  background-image: url("../../../../Lib/bootstrap/img/glyphicons-halflings-white.png");
 }
 
 .app-config .feed-auto {
-  color: #999;
+  color: #ccc;
 }
 
 /* -------------------------------------------------------------------
    Application
 --------------------------------------------------------------------*/
 body {
-  background-color: #f5f5f5;
+  /*background-color: #f5f5f5;*/
 }
 #app-block {
   padding:10px;

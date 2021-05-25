@@ -168,6 +168,13 @@ body.app .container-fluid {
   color: #999;
 }
 
+.ajax-loader {
+  background: #222
+        url(../../images/ajax-loader.gif)
+        center
+        no-repeat;
+}
+
 /* -------------------------------------------------------------------
    MOBILE FIRST:
 
