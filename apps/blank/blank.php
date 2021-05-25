@@ -10,7 +10,7 @@ global $path, $session, $v;
 <div id="app-block" style="display:none">
   <div style="height:20px; border-bottom:1px solid #333; padding:8px;">
     <div style="float:right;">
-      <i class="config-open icon-wrench" style="cursor:pointer"></i>
+      <i class="config-open icon-wrench icon-white" style="cursor:pointer"></i>
     </div>
   </div>
   <div style="text-align:center">

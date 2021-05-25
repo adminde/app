@@ -102,6 +102,9 @@ var config = {
 
     UI: function() {
         $(".app-config").html("");
+        $("body").css('background-color','#222');
+        $("#footer").css('background-color','#181818');
+        $("#footer").css('color','#999');
         
         // Remove old config items that are no longer used/described in new config definition
         if (config.db.constructor===Array) config.db = {};
@@ -115,7 +118,11 @@ var config = {
         for (var z in config.app) {
             out += "<div class='app-config-box' key='"+z+"'>";
             if (config.app[z].type=="feed") {
-                out += "<i class='status icon-ok-sign icon-app-config'></i> <b class='feed-name' key='"+z+"'>"+config.app[z].autoname+" <span class='feed-auto'>[AUTO]</span></b><i class='app-config-edit icon-pencil icon-app-config' style='float:right; cursor:pointer'></i>";
+                
+                var selection_mode = "AUTO";
+                if (config.db[z]=="disable") selection_mode = "DISABLED";
+                
+                out += "<i class='status icon-ok-sign icon-app-config'></i> <b class='feed-name' key='"+z+"'>"+config.app[z].autoname+" <span class='feed-auto'>["+selection_mode+"]</span></b><i class='app-config-edit icon-pencil icon-app-config' style='float:right; cursor:pointer'></i>";
                 out += "<br><span class='app-config-info'></span>";
                 out += "<div class='feed-select-div input-append'><select class='feed-select'></select><button class='btn feed-select-ok'>ok</button></div>";
             } else if (config.app[z].type=="value") {
@@ -148,7 +155,8 @@ var config = {
             if (config.app[z].type=="feed") {
                 // Create list of feeds that satisfy engine requirement
                 var out = "<option value=0>Select "+z+" feed:</option>" +
-                        "<option value=auto>AUTO SELECT</option>";
+                        "<option value=auto>AUTO SELECT</option>" + 
+                        "<option value=disable>DISABLE</option>"
                 
                 var feedsbygroup = [];
                 for (var f in config.feedsbyid)  {
@@ -243,7 +251,7 @@ var config = {
             
             var feedid = $(this).parent().find(".feed-select").val();
             
-            if (feedid!="auto" && feedid!=0) {
+            if (feedid!="auto" && feedid!=0 && feedid!="disable") {
                 config.db[key] = feedid;
                 var keyappend = ""; if (key!=config.feedsbyid[feedid].name) keyappend = key+": ";
                 configItem.find(".feed-name").html(keyappend+config.feedsbyid[feedid].name);
@@ -255,6 +263,11 @@ var config = {
             if (feedid=="auto") {
                 delete config.db[key];
                 configItem.find(".feed-name").html(config.app[key].autoname+" <span class='feed-auto'>[AUTO]</span>");
+            }
+            
+            if (feedid=="disable") {
+                config.db[key] = "disable"
+                configItem.find(".feed-name").html(config.app[key].autoname+" <span class='feed-auto'>[DISABLED]</span>");
             }
             
             if (feedid!=0 ) {
