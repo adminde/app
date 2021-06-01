@@ -50,11 +50,11 @@
     <!-- instructions and settings -->
     <div class="row-fluid">
         <div class="span9 app-config-description">
-            <div class="app-config-description-inner text-light">
+            <div class="app-config-description-inner text-dark">
                 <h2 class="app-config-title text-primary"><?php echo _('Feed-in tariff'); ?></h2>
                 <p class="lead">The feed-in tariff app is a simple home energy monitoring app to explore onsite energy generation, feed-in and self-consumption, as well as the buildings overall consumption and cost.</p>
                 <p><strong class="text-black">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
-                <p><strong class="text-light">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
+                <p><strong class="text-black">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
             </div>
         </div>
         <div class="span3 app-config pt-3"></div>
@@ -126,7 +126,7 @@ config.app = {
     },
     "export_cost": {
         "type": "value",
-        "default": 0.12,
+        "default": 0.07,
         "name": "Feed-in tariff payments",
         "description": "Unit cost of exported electricity in &euro;/kWh"
     },

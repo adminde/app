@@ -151,13 +151,11 @@
     <h2 class="app-config-title">My Heatpump</h2>
 
     <div class="app-config-description">
-      <div class="app-config-description-inner">
-        The My Heatpump app can be used to explore the performance of a heatpump including, electricity consumption, heat output, COP and system temperatures.
-        <br><br>
-        <b>Auto configure:</b> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.
-        <br><br>
-        <b>Cumulative kWh</b> feeds can be generated from power feeds with the power_to_kwh input processor.
-        <br><br>
+      <div class="app-config-description-inner text-dark">
+        <h2 class="app-config-title text-primary"><?php echo _('My Heatpump'); ?></h2>
+        <p class="lead">The My Heatpump app can be used to explore the performance of a heatpump including, electricity consumption, heat output, COP and system temperatures.</p>
+        <p><strong class="text-black">Auto configure:</strong> This app can auto-configure connecting to emoncms feeds with the names shown on the right, alternatively feeds can be selected by clicking on the edit button.</p>
+        <p><strong class="text-black">Cumulative kWh</strong> feeds can be generated from power feeds with the power_to_kwh input processor.</p>
         <img src="../Modules/app/images/myelectric_app.png" style="width:600px" class="img-rounded">
       </div>
     </div>

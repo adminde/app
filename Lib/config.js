@@ -102,9 +102,6 @@ var config = {
 
     UI: function() {
         $(".app-config").html("");
-        $("body").css('background-color','#222');
-        $("#footer").css('background-color','#181818');
-        $("#footer").css('color','#999');
         
         // Remove old config items that are no longer used/described in new config definition
         if (config.db.constructor===Array) config.db = {};
