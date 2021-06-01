@@ -126,7 +126,7 @@ config.app = {
     },
     "export_cost": {
         "type": "value",
-        "default": 0.12,
+        "default": 0.07,
         "name": "Feed-in tariff payments",
         "description": "Unit cost of exported electricity in &euro;/kWh"
     },
